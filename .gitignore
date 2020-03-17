@@ -30,3 +30,13 @@
 *.exe
 *.out
 *.app
+
+#vscode scripts
+*.json
+
+#image outputs
+*.pgm
+*.ppm
+
+#makefile
+makefile

@@ -1,5 +1,6 @@
 #include "CPlotter.h"
 #include "CImageSaver.h"
+#include <string.h>
 
 CPlotter::CPlotter(int canvasWidth, int canvasHeigth): 
 m_canvas(canvasWidth, canvasHeigth), m_plotArea(10, 10, canvasHeigth - 10, canvasWidth - 10){

@@ -7,7 +7,7 @@ public:
 	template<class T>
 	static bool SaveAsPgm(CBuffer<T>& image, const char* fileName){
 		FILE* filep = NULL;
-		fopen_s(&filep, fileName, "wb");
+		filep = fopen(fileName, "wb");
 		if(filep == NULL)
 			return false;
 
@@ -32,7 +32,7 @@ public:
 	template<class T>
 	static bool SaveAsPpm(CBuffer<T>& image, const char* fileName){
 		FILE* filep = NULL;
-		fopen_s(&filep, fileName, "wb");
+		filep = fopen(fileName, "wb");
 		if(filep == NULL)
 			return false;
 

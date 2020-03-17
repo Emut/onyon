@@ -6,6 +6,7 @@
 #include "CFontFactory.h"
 #include <algorithm>
 #include "CPoint.h"
+#include <math.h>
 #define ROUND(X) int(X<0?ceil(X-0.5):floor(X+0.5))
 
 template<class T>
@@ -84,7 +85,7 @@ public:
 		--size.X();	//numOfGaps is one less than letters
 		return size;
 	}
-
+/*
 	static void DrawStringVertical(CBuffer<T>& buf, const T fill, CPoint<int> pos, char* string) {
 		IFont* itsFont = CFontFactory::getFont("7_12_Serif", 12);
 		while (*string != 0) {
@@ -96,7 +97,7 @@ public:
 			++string;
 		}
 	}
-
+*/
 	static void DrawStringRotatedLeft(CBuffer<T>& buf, const T fill, CPoint<int> pos, char* string) {
 		IFont* itsFont = CFontFactory::getFont("7_12_Serif", 12);
 		while (*string != 0) {
