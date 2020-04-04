@@ -32,16 +32,16 @@ int main(){
 		heartY.push_back(-temp);
 	}
 	myPlot.Plot(heartY.begin(), heartY.end(), heartX.begin(), heartX.end());
-	myPlot.SaveAsPpm("heart.ppm");
+	//myPlot.SaveAsPpm("heart.ppm");
 	myPlot.Plot(vecty.begin(), vecty.end());
-	myPlot.SaveAsPpm("image1.ppm");
+	//myPlot.SaveAsPpm("image1.ppm");
 	myPlot.Plot(vecty.begin(), vecty.end(), vectx.begin(), vectx.end());
-	myPlot.SaveAsPpm("image2.ppm");
+	//myPlot.SaveAsPpm("image2.ppm");
 
 	myPlot.setTitle("0123456789 ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-	myPlot.SaveAsPpm("image3.ppm");
+	//myPlot.SaveAsPpm("image3.ppm");
 	myPlot.setX_AxisLabel("X LABEL");
-	myPlot.SaveAsPpm("image4.ppm");
+	//myPlot.SaveAsPpm("image4.ppm");
 	myPlot.setY_AxisLabel("Y LABEL");
 
 	myPlot.SaveAsPgm("image.pgm");

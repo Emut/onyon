@@ -49,6 +49,7 @@ public:
 	}
 	template<class IterY, class IterX>
 	void Plot(IterY y_begin, IterY y_end, IterX x_begin, IterX x_end){
+		m_NeedRedraw = true;
 		m_lineData.push_back(LineData());
 		m_lineData[m_DrawnLineCount].id = m_DrawnLineCount;
 		CRGB penColor;
@@ -91,7 +92,6 @@ public:
 			++y_it;
 		}
 		++m_DrawnLineCount;
-		Draw();
 	}
 
 	bool SaveAsPgm(const char* fileName);
@@ -106,6 +106,7 @@ private:
 	//int m_canvasHeigth;
 	CBuffer<CRGB> m_canvas;
 	int m_DrawnLineCount;
+	bool m_NeedRedraw;
 	char* m_title;
 	char* m_xAxisLabel;
 	char* m_yAxisLabel;

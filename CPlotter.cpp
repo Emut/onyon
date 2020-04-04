@@ -9,13 +9,22 @@ m_canvas(canvasWidth, canvasHeigth), m_plotArea(10, 10, canvasHeigth - 10, canva
 	m_title = NULL;
 	m_xAxisLabel = NULL;
 	m_yAxisLabel = NULL;
+	m_NeedRedraw = false;
 }
 
 bool CPlotter::SaveAsPgm(const char* fileName){
+	if(m_NeedRedraw){
+		m_NeedRedraw = false;
+		Draw();
+	}
 	return CImageSaver::SaveAsPgm(m_canvas, fileName);
 }
 
 bool CPlotter::SaveAsPpm(const char* fileName){
+	if(m_NeedRedraw){
+		m_NeedRedraw = false;
+		Draw();
+	}
 	return CImageSaver::SaveAsPpm(m_canvas, fileName);
 }
 
@@ -24,21 +33,21 @@ void CPlotter::setTitle(const char* title) {
 		delete[] m_title;
 	m_title = new char[strlen(title)];
 	strcpy(m_title, title);
-	Draw();
+	m_NeedRedraw = true;
 }
 void CPlotter::setX_AxisLabel(const char* label) {
 	if (m_xAxisLabel != NULL)
 		delete[] m_xAxisLabel;
 	m_xAxisLabel = new char[strlen(label)];
 	strcpy(m_xAxisLabel, label);
-	Draw();
+	m_NeedRedraw = true;
 }
 void CPlotter::setY_AxisLabel(const char* label) {
 	if (m_yAxisLabel != NULL)
 		delete[] m_yAxisLabel;
 	m_yAxisLabel = new char[strlen(label)];
 	strcpy(m_yAxisLabel, label);
-	Draw();
+	m_NeedRedraw = true;
 }
 
 void CPlotter::DrawPlotBorder() {
@@ -46,6 +55,7 @@ void CPlotter::DrawPlotBorder() {
 }
 
 void CPlotter::Draw() {
+	printf("Draw\n");
 	m_canvas.Fill(CRGB(255, 255, 255)); //clear the canvas
 	if (m_title != NULL) {
 		CPoint<int> size = DrawUtils<CRGB>::getStringSize(m_title);
@@ -110,6 +120,8 @@ void CPlotter::Draw() {
 }
 
 void CPlotter::DrawTicks() {
+	return;
+	//stubbed for now. Work will continue on a branch
 	char nums[10];
 	sprintf(nums, "%04.1f", m_dataLimits.getRight());
 	DrawUtils<CRGB>::DrawString(m_canvas, CRGB(0, 0, 0), m_plotArea.getBottomRight() - CPoint<int>(30,0), nums);
