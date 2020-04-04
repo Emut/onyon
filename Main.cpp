@@ -1,7 +1,7 @@
 #include <iostream>
-#include "CBuffer.h"
-#include "DrawUtils.h"
-#include "CImageSaver.h"
+//#include "CBuffer.h"
+//#include "DrawUtils.h"
+//#include "CImageSaver.h"
 #include "CPlotter.h"
 
 #include <math.h>
@@ -31,9 +31,11 @@ int main(){
 		temp -= cos(4 * i);
 		heartY.push_back(-temp);
 	}
-	myPlot.Plot(heartY.begin(), heartY.end(), heartX.begin(), heartX.end());
-	//myPlot.SaveAsPpm("heart.ppm");
-	myPlot.Plot(vecty.begin(), vecty.end());
+	int heartLine = myPlot.Plot(heartY.begin(), heartY.end(), heartX.begin(), heartX.end());
+	myPlot.setLineColor(heartLine, CRGB(0,0,0));
+	myPlot.SaveAsPpm("heart.ppm");
+	int shortSine = myPlot.Plot(vecty.begin(), vecty.end());
+	myPlot.setLineDataPointMarker(shortSine, LineData::DPM_CIRCLE);
 	//myPlot.SaveAsPpm("image1.ppm");
 	myPlot.Plot(vecty.begin(), vecty.end(), vectx.begin(), vectx.end());
 	//myPlot.SaveAsPpm("image2.ppm");

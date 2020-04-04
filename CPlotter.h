@@ -7,48 +7,22 @@
 #include "Colors.h"
 #include "CPoint.h"
 #include "CRect.h"
-using namespace std;
+#include "CLineData.h"
+#include "CLinearIter.h"
 
 class CPlotter{
-	//class to be used as a simply counting iterator
-	template<class T>
-	class CLinearIter{
-		T m_i;
-	public:
-		CLinearIter(T i): m_i(i){}
-		void operator++(){
-			++m_i;
-		}
-		CLinearIter<T>& operator++(int){
-			++m_i;
-			return *this;
-		}
-		bool operator!=(const CLinearIter<T>& comp){
-			return m_i != comp.m_i;
-		}
-		T& operator*(){
-			return m_i;
-		}
-		CLinearIter<T>& operator=(const CLinearIter<T>& copyFrom){
-			m_i = copyFrom.m_i;
-			return *this;
-		}
-		CLinearIter(const CLinearIter<T>& copyFrom){
-			m_i = copyFrom.m_i;
-		}
-	};
 
 public:
 	CPlotter(int canvasWidth = 640, int canvasHeigth = 480);
 
 	template<class IterY>
-	void Plot(IterY y_begin, IterY y_end){
+	int Plot(IterY y_begin, IterY y_end){
 		CLinearIter<int> dummyIterBegin(1);
 		CLinearIter<int> dummyIterEnd(1000);
-		Plot(y_begin, y_end, dummyIterBegin, dummyIterEnd);
+		return Plot(y_begin, y_end, dummyIterBegin, dummyIterEnd);
 	}
 	template<class IterY, class IterX>
-	void Plot(IterY y_begin, IterY y_end, IterX x_begin, IterX x_end){
+	int Plot(IterY y_begin, IterY y_end, IterX x_begin, IterX x_end){
 		m_NeedRedraw = true;
 		m_lineData.push_back(LineData());
 		m_lineData[m_DrawnLineCount].id = m_DrawnLineCount;
@@ -92,6 +66,7 @@ public:
 			++y_it;
 		}
 		++m_DrawnLineCount;
+		return m_lineData[m_DrawnLineCount-1].id;
 	}
 
 	bool SaveAsPgm(const char* fileName);
@@ -101,32 +76,27 @@ public:
 	void setX_AxisLabel(const char* title);
 	void setY_AxisLabel(const char* title);
 
+	bool setLineDataPointMarker(int LineID, LineData::teDataPointMark marker);
+	bool setLineColor(int lineID, CRGB color);
+
 private:
-	//int m_canvasWidth;
-	//int m_canvasHeigth;
+	
 	CBuffer<CRGB> m_canvas;
 	int m_DrawnLineCount;
 	bool m_NeedRedraw;
 	char* m_title;
 	char* m_xAxisLabel;
 	char* m_yAxisLabel;
-	//CPoint<int> m_plotAreaTL;
-	//CPoint<int> m_plotAreaBR;
 	CRect<int> m_plotArea;
 	CRect<float> m_dataLimits;
 
 	void Draw();
 	void DrawPlotBorder();
 	void DrawTicks();
+	LineData* getLineData(int lineID);
 
-	struct LineData{
-		int id;
-		float y_min, y_max, x_min, x_max;
-		CRGB color;
-		int dataCount;
-		float *ydata, *xdata;
-	};
-	vector<LineData> m_lineData;
+	
+	std::vector<LineData> m_lineData;
 };
 
 
