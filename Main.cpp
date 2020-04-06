@@ -32,7 +32,7 @@ int main(){
 		heartY.push_back(-temp);
 	}
 	int heartLine = myPlot.Plot(heartY.begin(), heartY.end(), heartX.begin(), heartX.end());
-	myPlot.setLineColor(heartLine, CRGB(0,0,0));
+	myPlot.setLineColor(heartLine, CRGB(255,0,0));
 	myPlot.SaveAsPpm("heart.ppm");
 	int shortSine = myPlot.Plot(vecty.begin(), vecty.end());
 	myPlot.setLineDataPointMarker(shortSine, LineData::DPM_CIRCLE);

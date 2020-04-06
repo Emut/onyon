@@ -14,6 +14,7 @@ public:
 	void setGreen(unsigned char value);
 	void setBlue(unsigned char value);
 
+	bool operator==(const CRGB& other);
 private:
 	unsigned char m_red;
 	unsigned char m_green;

@@ -163,7 +163,10 @@ bool CPlotter::setLineDataPointMarker(int lineID, LineData::teDataPointMark mark
 	LineData* pLine = getLineData(lineID);
 	if(pLine == NULL)
 		return false;
+	if(pLine->dataPointMarker == marker)
+		return true;
 	pLine->dataPointMarker = marker;
+	m_NeedRedraw = true;
 	return true;
 }
 bool CPlotter::setLineColor(int lineID, CRGB color)
@@ -171,6 +174,9 @@ bool CPlotter::setLineColor(int lineID, CRGB color)
 	LineData* pLine = getLineData(lineID);
 	if(pLine == NULL)
 		return false;
+	if(color == pLine->color)
+		return true;	//no need to change color
 	pLine->color = color;
+	m_NeedRedraw = true;
 	return true;
 }
