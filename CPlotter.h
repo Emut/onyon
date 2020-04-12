@@ -9,21 +9,24 @@
 #include "CRect.h"
 #include "CLineData.h"
 #include "CLinearIter.h"
+#include "CDisplayHandler.h"
 
-class CPlotter{
+class CPlotter
+{
 
 public:
 	CPlotter(int canvasWidth = 640, int canvasHeigth = 480);
 
-	template<class IterY>
-	int Plot(IterY y_begin, IterY y_end){
+	template <class IterY>
+	int Plot(IterY y_begin, IterY y_end)
+	{
 		CLinearIter<int> dummyIterBegin(1);
 		CLinearIter<int> dummyIterEnd(1000);
 		return Plot(y_begin, y_end, dummyIterBegin, dummyIterEnd);
 	}
-	template<class IterY, class IterX>
-	int Plot(IterY y_begin, IterY y_end, IterX x_begin, IterX x_end){
-		m_NeedRedraw = true;
+	template <class IterY, class IterX>
+	int Plot(IterY y_begin, IterY y_end, IterX x_begin, IterX x_end)
+	{
 		m_lineData.push_back(LineData());
 		m_lineData[m_DrawnLineCount].id = m_DrawnLineCount;
 		CRGB penColor;
@@ -40,12 +43,25 @@ public:
 		float y_max = *y_it;
 		float x_min = *x_it;
 		float x_max = *x_it;
-		while (x_it != x_end && y_it != y_end) {	//if x and y data counts do not match, draw until the smallest
+		while (x_it != x_end && y_it != y_end)
+		{ //if x and y data counts do not match, draw until the smallest
 			++dataCount;
-			if (*y_it < y_min) { y_min = *y_it; }
-			if (*y_it > y_max) { y_max = *y_it; }
-			if (*x_it > x_max) { x_max = *x_it; }
-			if (*x_it < x_min) { x_min = *x_it; }
+			if (*y_it < y_min)
+			{
+				y_min = *y_it;
+			}
+			if (*y_it > y_max)
+			{
+				y_max = *y_it;
+			}
+			if (*x_it > x_max)
+			{
+				x_max = *x_it;
+			}
+			if (*x_it < x_min)
+			{
+				x_min = *x_it;
+			}
 			++x_it;
 			++y_it;
 		}
@@ -59,45 +75,51 @@ public:
 
 		x_it = x_begin;
 		y_it = y_begin;
-		for (int i = 0; i < dataCount; ++i) {
+		for (int i = 0; i < dataCount; ++i)
+		{
 			m_lineData[m_DrawnLineCount].xdata[i] = float(*x_it);
 			++x_it;
 			m_lineData[m_DrawnLineCount].ydata[i] = float(*y_it);
 			++y_it;
 		}
 		++m_DrawnLineCount;
-		return m_lineData[m_DrawnLineCount-1].id;
+		PlotUpdated();
+		return m_lineData[m_DrawnLineCount - 1].id;
 	}
 
-	bool SaveAsPgm(const char* fileName);
-	bool SaveAsPpm(const char* fileName);
+	bool ToggleDisplayWindow(bool enable);
 
-	void setTitle(const char* title);
-	void setX_AxisLabel(const char* title);
-	void setY_AxisLabel(const char* title);
+	bool SaveAsPgm(const char *fileName);
+	bool SaveAsPpm(const char *fileName);
+
+	void setTitle(const char *title);
+	void setX_AxisLabel(const char *title);
+	void setY_AxisLabel(const char *title);
 
 	bool setLineDataPointMarker(int LineID, LineData::teDataPointMark marker);
 	bool setLineColor(int lineID, CRGB color);
 
 private:
-	
 	CBuffer<CRGB> m_canvas;
 	int m_DrawnLineCount;
 	bool m_NeedRedraw;
-	char* m_title;
-	char* m_xAxisLabel;
-	char* m_yAxisLabel;
+	char *m_title;
+	char *m_xAxisLabel;
+	char *m_yAxisLabel;
 	CRect<int> m_plotArea;
 	CRect<float> m_dataLimits;
 
+	void PlotUpdated();
 	void Draw();
 	void DrawPlotBorder();
 	void DrawTicks();
-	LineData* getLineData(int lineID);
+	LineData *getLineData(int lineID);
 
-	
 	std::vector<LineData> m_lineData;
-};
 
+	bool m_windowEnabled;
+	CDisplayHandler *m_itsWindowHandler;
+	bool UpdateWindow();
+};
 
 #endif

@@ -1,6 +1,6 @@
 #ifndef CBUFFER_H
 #define CBUFFER_H
-
+#include <iostream>
 
 template<class T>
 class CBuffer{

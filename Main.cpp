@@ -11,6 +11,7 @@ int main(){
 	std::cout<<"Hi"<<std::endl;
 	
 	CPlotter myPlot;
+	myPlot.ToggleDisplayWindow(true);
 	std::vector<int> vectx, vecty;
 	for(int i = 0; i < 600; i += 20){
 		vectx.push_back(i);
