@@ -13,6 +13,7 @@ CPlotter::CPlotter(int canvasWidth, int canvasHeigth) : m_canvas(canvasWidth, ca
 	m_yAxisLabel = NULL;
 	m_NeedRedraw = false;
 	m_windowEnabled = false;
+	m_itsWindowHandler = NULL;
 }
 
 void CPlotter::PlotUpdated()

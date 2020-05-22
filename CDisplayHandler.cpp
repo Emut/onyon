@@ -8,7 +8,11 @@ using namespace std;
 
 CDisplayHandler::CDisplayHandler(int windowWidth, int windowHeigth, const char *windowName)
 {
-    namedWindow("Display window", WINDOW_AUTOSIZE);
+    int nameLength = strlen(windowName);
+    m_windowName = new char[nameLength + 1];
+    strcpy(m_windowName, windowName);
+    namedWindow(windowName, WINDOW_AUTOSIZE);
+    setMouseCallback(windowName, MouseMoveCallback);
 }
 
 CDisplayHandler::~CDisplayHandler()
@@ -18,7 +22,11 @@ CDisplayHandler::~CDisplayHandler()
 bool CDisplayHandler::Update(CBuffer<CRGB>& image)
 {
     Mat temp = Mat(image.getHeigth(), image.getWidth(), CV_8UC3, image.getBufferPointer());
-    imshow("Display window", temp);
-    waitKey();
+    imshow(m_windowName, temp);
+    waitKey(25);
     return true;
+}
+
+void CDisplayHandler::MouseMoveCallback(int event, int x, int y, int flag, void *param){
+    cout<<x<<' '<<y<<endl;
 }
