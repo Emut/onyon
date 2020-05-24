@@ -2,45 +2,34 @@
 #include "DrawUtils.h"
 #include <string.h>
 
-CBackgroundManager::CBackgroundManager() : m_itsCanvas(0, 0){}
 
-void CBackgroundManager::Create(CBuffer<CRGB> itsCanvas)
+void CBackgroundManager::setTextProperties(WidgetTextFields *texts)
 {
-    m_itsCanvas = itsCanvas;
-    m_activeCanvasArea = CRect<int>(CPoint<int>(0, 0), m_itsCanvas.getSize());
+    m_textFields = texts;
 }
 
-CBuffer<CRGB> CBackgroundManager::getActiveCanvas()
+void CBackgroundManager::Draw(CBuffer<CRGB> buf)
 {
-    return CBuffer<CRGB>(m_itsCanvas, m_activeCanvasArea);
-}
-
-void CBackgroundManager::Draw()
-{
-    DrawUtils<CRGB>::DrawRectangle(m_itsCanvas,
+    buf.Fill(CRGB(200,200,200));
+    m_activeCanvasArea = buf.getAreaRect();
+    DrawUtils<CRGB>::DrawRectangle(buf,
                                    CRGB(0, 0, 0), CPoint<int>(0, 0),
-                                   m_itsCanvas.getSize() - CPoint<int>(1, 1));
+                                   buf.getSize() - CPoint<int>(1, 1));
 
-    if(m_widgetTitle.text != NULL)
+    if (m_textFields->titleText.getText() != NULL)
     {
-        DrawUtils<CRGB>::DrawString(m_itsCanvas, m_widgetTitle.color, m_widgetTitle.pos, m_widgetTitle.text);
+        CPoint<int> titleSize = DrawUtils<CRGB>::getStringSize(m_textFields->titleText.getText());
+        if (!m_textFields->titleText.isPosSetExt)
+        {
+            m_textFields->titleText.pos.X() = (buf.getWidth() - titleSize.X()) / 2;
+            m_textFields->titleText.pos.Y() = 1;
+        }
+        DrawUtils<CRGB>::DrawString(buf, m_textFields->titleText.color, m_textFields->titleText.pos, m_textFields->titleText.getText());
+        m_activeCanvasArea.setTop(titleSize.Y() + 1);
     }
+    return;
 }
 
-void CBackgroundManager::setTitle(const char *titleText)
-{
-    if (m_widgetTitle.text != NULL)
-        delete[] m_widgetTitle.text;
-
-    int titleLen = strlen(titleText);
-    m_widgetTitle.text = new char[titleLen + 1];
-    strcpy(m_widgetTitle.text, titleText);
-
-    CPoint<int> titleSize = DrawUtils<CRGB>::getStringSize(titleText);
-    if (!m_widgetTitle.isPosSetExt)
-    {
-        m_widgetTitle.pos.X() = (m_itsCanvas.getWidth() - titleSize.X()) / 2;
-        m_widgetTitle.pos.Y() = 1;
-    }
-    m_activeCanvasArea.setTop(m_widgetTitle.pos.Y() + titleSize.Y() + 1);
+CRect<int> CBackgroundManager::getActiveArea(){
+    return m_activeCanvasArea;
 }

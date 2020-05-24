@@ -1,6 +1,6 @@
 #include "CCanvas.h"
 #include "CImageSaver.h"
-#include "CWidgetFactory.h"
+#include "CLayerFactory.h"
 
 CCanvas::CCanvas(int canvasWidth, int canvasHeigth) : m_itsCanvas(canvasWidth, canvasHeigth),
                                                       m_itsDisplay(canvasWidth, canvasHeigth, "Name")
@@ -19,24 +19,39 @@ bool CCanvas::SaveAsPpm(const char *fileName)
     return CImageSaver::SaveAsPpm(m_itsCanvas, fileName);
 }
 
-int CCanvas::CreateWidget(const char *widgetType, CRect<int> position)
+int CCanvas::CreateWidget(CRect<int> position)
 {
-    IWidget *newWidget = CWidgetFactory::getWidget(widgetType);
-    if (newWidget == NULL)
-        return -1; //not found in factory.
 
     int widgetID = m_itsWidgets.size();
-    m_itsWidgets.push_back(newWidget);
+
+    //initialize the vectors for various data
+    std::vector<ILayer *> tempLayers;
+    m_itsWidgets.push_back(tempLayers);
     std::vector<CSeriesData *> tempData;
     m_itsData.push_back(tempData);
-    newWidget->Create(CBuffer<CRGB>(m_itsCanvas, position));
+    m_widgetAreas.push_back(position);
+    WidgetTextFields tempTexts;
+    m_widgetTexts.push_back(tempTexts);
 
     return widgetID;
 }
 
+int CCanvas::InsertLayer(int widgetID, const char *layerType)
+{
+    if (m_itsWidgets.size() <= widgetID)
+        return -1; //widget does not exist.
+
+    ILayer *newLayer = CWidgetFactory::getLayer(layerType);
+    if (newLayer == NULL)
+        return -1; //not found in factory.
+
+    m_itsWidgets[widgetID].push_back(newLayer);
+    return 0;
+}
+
 int CCanvas::InsertData(int widgetID, float *begin, float *end)
 {
-    if (m_itsWidgets.size() <= widgetID && m_itsWidgets[widgetID] == NULL)
+    if (m_itsWidgets.size() <= widgetID)
         return -1;
 
     int newDataID = m_itsData[widgetID].size();
@@ -63,7 +78,7 @@ int CCanvas::InsertData(int widgetID, float *begin, float *end)
 
 int CCanvas::ReplaceData(int widgetID, int dataID, float *begin, float *end)
 {
-    if (m_itsWidgets.size() <= widgetID && m_itsWidgets[widgetID] == NULL)
+    if (m_itsWidgets.size() <= widgetID)
         return -1;
     //if said data does not exist, insert it
     if (m_itsData.size() <= dataID)
@@ -89,9 +104,26 @@ int CCanvas::ReplaceData(int widgetID, int dataID, float *begin, float *end)
 
 bool CCanvas::UpdateWidget(int widgetID)
 {
-    if (m_itsWidgets.size() <= widgetID && m_itsWidgets[widgetID] == NULL)
+    if (m_itsWidgets.size() <= widgetID)
         return false;
-    m_itsWidgets[widgetID]->Draw(m_itsData[widgetID]);
+
+    CRect<int> drawArea = m_widgetAreas[widgetID];
+    for (int j = 0; j < m_itsWidgets[widgetID].size(); ++j)
+    {
+        ILayer *currentLayer = m_itsWidgets[widgetID][j];
+        currentLayer->setData(m_itsData[widgetID]);
+        currentLayer->setTextProperties(&m_widgetTexts[widgetID]);
+        currentLayer->Draw(CBuffer<CRGB>(m_itsCanvas, drawArea));
+        drawArea = currentLayer->getActiveArea();
+        int w = drawArea.getWidth();
+        int h = drawArea.getHeigth();
+        if (drawArea.getHeigth() <= 0 || drawArea.getWidth() <= 0)
+        {
+            break;
+        }
+        drawArea += m_widgetAreas[widgetID].getTopLeft();
+    }
+
     if (m_displayEnabled)
         m_itsDisplay.Update(m_itsCanvas);
     return true;
@@ -108,8 +140,11 @@ bool CCanvas::DisplayOnScreen(bool enable, const char *screenName)
     return true;
 }
 
-bool CCanvas::setWidgetTitle(int widgetID, const char* titleText){
-    if (m_itsWidgets.size() <= widgetID && m_itsWidgets[widgetID] == NULL)
+bool CCanvas::setWidgetTitle(int widgetID, const char *titleText)
+{
+    if (m_widgetTexts.size() <= widgetID)
         return false;
-    return m_itsWidgets[widgetID]->setTitle(titleText);
+
+    m_widgetTexts[widgetID].titleText.setText(titleText);
+    return true;
 }

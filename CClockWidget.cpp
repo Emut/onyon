@@ -1,47 +1,43 @@
 #include "CClockWidget.h"
 #include "DrawUtils.h"
 
-CClockWidget::CClockWidget() : m_itsCanvas(0, 0)
+CClockWidget::CClockWidget()
 {
     second = 0;
     minute = 0;
     hour = 0;
 }
 
-void CClockWidget::Create(CBuffer<CRGB> itsCanvas)
-{
-    m_itsCanvas = itsCanvas;
-    m_bgMgr->Create(m_itsCanvas);
+void CClockWidget::setData(std::vector<CSeriesData*> data){
+    m_itsData = data;
 }
-void CClockWidget::Draw(const std::vector<CSeriesData *> &data)
-{
-    m_itsCanvas.Fill(CRGB(255,255,255));
-    m_bgMgr->Draw();
-    CBuffer<CRGB> actCanvas = m_bgMgr->getActiveCanvas();
 
+void CClockWidget::Draw(CBuffer<CRGB> actCanvas)
+{
+    
     do
     {
-        if (data.size() == 0)
+        if (m_itsData.size() == 0)
             break;
-        if (data[0]->dataCount < 1)
+        if (m_itsData[0]->dataCount < 1)
             break;
-        hour = data[0]->ydata[0];
-        if (data[0]->dataCount < 2)
+        hour = m_itsData[0]->ydata[0];
+        if (m_itsData[0]->dataCount < 2)
             break;
-        minute = data[0]->ydata[1];
-        if (data[0]->dataCount < 3)
+        minute = m_itsData[0]->ydata[1];
+        if (m_itsData[0]->dataCount < 3)
             break;
-        second = data[0]->ydata[2];
+        second = m_itsData[0]->ydata[2];
     } while (false);
-
-    DrawDial();
-    DrawHands();
+    
+    DrawDial(actCanvas);
+    DrawHands(actCanvas);
     return;
 }
 
-void CClockWidget::DrawDial()
+void CClockWidget::DrawDial(CBuffer<CRGB> actCanvas)
 {
-    CBuffer<CRGB> actCanvas = m_bgMgr->getActiveCanvas();
+    //CBuffer<CRGB> actCanvas = m_bgMgr->getActiveCanvas();
     CPoint<int> clockCenter(actCanvas.getWidth() / 2, actCanvas.getHeigth() / 2);
 
     int outerRad = std::min(actCanvas.getWidth(), actCanvas.getHeigth()) / 2 - 5;
@@ -66,10 +62,10 @@ void CClockWidget::DrawDial()
         DrawUtils<CRGB>::DrawString(actCanvas, CRGB(255, 0, 0), textTopLeft, numberText);
     }
 }
-void CClockWidget::DrawHands()
+void CClockWidget::DrawHands(CBuffer<CRGB> actCanvas)
 {
 
-    CBuffer<CRGB> actCanvas = m_bgMgr->getActiveCanvas();
+    //CBuffer<CRGB> actCanvas = m_bgMgr->getActiveCanvas();
     CPoint<int> clockCenter(actCanvas.getWidth() / 2, actCanvas.getHeigth() / 2);
     int outerRad = std::min(actCanvas.getWidth(), actCanvas.getHeigth()) / 2 - 5;
     float hourLenCoeff = 0.4;

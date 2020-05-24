@@ -1,13 +1,13 @@
 #ifndef CWIDGETFACTORY_H
 #define CWIDGETFACTORY_H
 
-#include "IWidget.h"
+#include "ILayer.h"
 
 
 class CWidgetFactory
 {
 public:
-    static IWidget *getWidget(const char *widgetType);
+    static ILayer *getLayer(const char *layerType);
 };
 
 #endif

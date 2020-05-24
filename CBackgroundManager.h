@@ -3,39 +3,26 @@
 
 #include "CBuffer.h"
 #include "Colors.h"
+#include "ILayer.h"
+#include "tsTextProperties.h"
 
-class CBackgroundManager
+class CBackgroundManager: public ILayer
 {
 public:
-    CBackgroundManager();
-    void Create(CBuffer<CRGB> itsCanvas);
-    void Draw();
-    CBuffer<CRGB> getActiveCanvas();
+    //CBackgroundManager();
 
-    void setTitle(const char* titleText);
+    void Draw(CBuffer<CRGB> buf);
+    void setTextProperties(WidgetTextFields* texts);
+    CRect<int> getActiveArea();
 
 private:
-    CBuffer<CRGB> m_itsCanvas;
-
-    struct TextProperties{
-        char* text;
-        CPoint<int> pos;
-        bool isPosSetExt;
-        CRGB color;
-        TextProperties(): pos(0,0){
-            text = NULL;
-            isPosSetExt = false;
-        }    
-    };
-    TextProperties m_widgetTitle;
-    TextProperties m_xAxisLabel;
-    TextProperties m_yAxisLabel;
+    WidgetTextFields* m_textFields;
     CRect<int> m_activeCanvasArea;
    
 
     //disallow cc and assignment op
-    const CBackgroundManager operator=(const CBackgroundManager &);
-    CBackgroundManager(const CBackgroundManager &);
+    //const CBackgroundManager operator=(const CBackgroundManager &);
+    //CBackgroundManager(const CBackgroundManager &);
 };
 
 #endif

@@ -101,6 +101,10 @@ public:
 		return CPoint<int>(m_width, m_heigth);
 	}
 
+	CRect<int> getAreaRect(){
+		return CRect<int>(0, 0, m_heigth-1, m_width-1);
+	}
+
 private:
 	CBuffer(); //disallow defc
 

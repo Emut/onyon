@@ -17,9 +17,16 @@ int main()
 
 	CCanvas myCanvas(640, 480);
 	myCanvas.DisplayOnScreen(true, "myWindow");
-	int clockWidget = myCanvas.CreateWidget("AnalogClock", CRect<int>(10, 10, 210, 210));
-	int clockWidget2 = myCanvas.CreateWidget("AnalogClock", CRect<int>(10, 310, 410, 610));
+	int clockWidget = myCanvas.CreateWidget(CRect<int>(10, 10, 210, 210));
+	myCanvas.InsertLayer(clockWidget, "BackgroundManager");
+	myCanvas.InsertLayer(clockWidget, "AnalogClock");
+	
+	int clockWidget2 = myCanvas.CreateWidget(CRect<int>(10, 220, 410, 610));
+	myCanvas.InsertLayer(clockWidget2, "BackgroundManager");
+	myCanvas.InsertLayer(clockWidget2, "AnalogClock");
+
 	myCanvas.setWidgetTitle(clockWidget, "NICE CLOCK");
+	myCanvas.setWidgetTitle(clockWidget2, "HUGE CLOCK");
 	float timeData[] = {18, 32, 0};
 	int timeDataID = myCanvas.InsertData(clockWidget, timeData, timeData + 3);
 	int timeDataID2 = myCanvas.InsertData(clockWidget2, timeData, timeData + 3);

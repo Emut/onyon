@@ -12,6 +12,10 @@ public:
 		return CPoint<T>(X() - second.X(), Y() - second.Y());
 	}
 
+	CPoint<T> operator+(CPoint<T> second) {
+		return CPoint<T>(X() + second.X(), Y() + second.Y());
+	}
+
 	CPoint<T> operator/(T denominator) {
 		return CPoint<T>(X() / denominator, Y() / denominator);
 	}

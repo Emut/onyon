@@ -11,7 +11,8 @@ class CCanvas{
 public:
     CCanvas(int canvasWidth, int canvasHeigth);
 
-    int CreateWidget(const char* widgetType, CRect<int> position); 
+    int CreateWidget(CRect<int> position);
+    int InsertLayer(int widgetID, const char* layerType); 
     int InsertData(int widgetID, float* begin, float* end);
     int ReplaceData(int widgetID, int dataID, float* begin, float* end);
     bool RemoveData(int widgetID, int dataID);
@@ -28,8 +29,10 @@ public:
 private:
     CBuffer<CRGB> m_itsCanvas;
     CDisplayHandler m_itsDisplay;
-    std::vector<IWidget*> m_itsWidgets;
+    std::vector<std::vector<ILayer*> > m_itsWidgets;
     std::vector<std::vector<CSeriesData*> > m_itsData;
+    std::vector<CRect<int> > m_widgetAreas;
+    std::vector<WidgetTextFields> m_widgetTexts;
     bool m_displayEnabled;
 };
 
