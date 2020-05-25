@@ -32,6 +32,7 @@ int CCanvas::CreateWidget(CRect<int> position)
     m_widgetAreas.push_back(position);
     WidgetTextFields tempTexts;
     m_widgetTexts.push_back(tempTexts);
+    m_widgetBgColors.push_back(CRGB(255,255,255));
 
     return widgetID;
 }
@@ -46,7 +47,7 @@ int CCanvas::InsertLayer(int widgetID, const char *layerType)
         return -1; //not found in factory.
 
     m_itsWidgets[widgetID].push_back(newLayer);
-    return 0;
+    return m_itsWidgets[widgetID].size() - 1;
 }
 
 int CCanvas::InsertData(int widgetID, float *begin, float *end)
@@ -81,7 +82,7 @@ int CCanvas::ReplaceData(int widgetID, int dataID, float *begin, float *end)
     if (m_itsWidgets.size() <= widgetID)
         return -1;
     //if said data does not exist, insert it
-    if (m_itsData.size() <= dataID)
+    if (m_itsData[widgetID].size() <= dataID)
         return InsertData(widgetID, begin, end);
 
     int dataCount = 0;
@@ -111,7 +112,7 @@ bool CCanvas::UpdateWidget(int widgetID)
     for (int j = 0; j < m_itsWidgets[widgetID].size(); ++j)
     {
         ILayer *currentLayer = m_itsWidgets[widgetID][j];
-        currentLayer->setData(m_itsData[widgetID]);
+        currentLayer->setData(&m_itsData[widgetID]);
         currentLayer->setTextProperties(&m_widgetTexts[widgetID]);
         currentLayer->Draw(CBuffer<CRGB>(m_itsCanvas, drawArea));
         drawArea = currentLayer->getActiveArea();
@@ -146,5 +147,27 @@ bool CCanvas::setWidgetTitle(int widgetID, const char *titleText)
         return false;
 
     m_widgetTexts[widgetID].titleText.setText(titleText);
+    return true;
+}
+
+bool CCanvas::setDataColor(int widgetID, int dataID, CRGB color){
+    if (m_itsWidgets.size() <= widgetID)
+        return false;
+    
+    if (m_itsData[widgetID].size() <= dataID)
+        return false;
+
+    m_itsData[widgetID][dataID]->color = color;
+    return true;
+}
+
+bool CCanvas::setWidgetBackgroundColor(int widgetID, CRGB color){
+    if (m_itsWidgets.size() <= widgetID)
+        return false;
+    m_widgetBgColors[widgetID] = color;
+
+    for(int i = 0; i < m_itsWidgets[widgetID].size(); ++i)
+        m_itsWidgets[widgetID][i]->setBackgroundColor(color);
+
     return true;
 }

@@ -18,10 +18,12 @@ public:
     virtual CRect<int> getActiveArea();
 
     //
-    virtual void setData(std::vector<CSeriesData*> data);
+    virtual void setData(std::vector<CSeriesData*>* data);
 
     //fields such as title, x and y axis labels
     virtual void setTextProperties(WidgetTextFields *texts);
+
+    virtual void setBackgroundColor(CRGB color);
 
     //because the layers vary greatly in purpose, a generic
     //function to execute special functions through the interface

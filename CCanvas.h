@@ -20,6 +20,9 @@ public:
     bool UpdateWidget(int widgetID);
     void UpdateAllWidgets();
 
+    bool setWidgetBackgroundColor(int widgetID, CRGB color);
+    bool setDataColor(int widgetID, int dataID, CRGB color);
+
     bool DisplayOnScreen(bool enable, const char* screenName);
     bool SaveAsPgm(const char *fileName);
 	bool SaveAsPpm(const char *fileName);
@@ -33,6 +36,7 @@ private:
     std::vector<std::vector<CSeriesData*> > m_itsData;
     std::vector<CRect<int> > m_widgetAreas;
     std::vector<WidgetTextFields> m_widgetTexts;
+    std::vector<CRGB> m_widgetBgColors;
     bool m_displayEnabled;
 };
 

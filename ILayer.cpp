@@ -19,11 +19,15 @@ void ILayer::setTextProperties(WidgetTextFields *textFields)
     return;
 }
 
-void ILayer::setData(std::vector<CSeriesData*> data)
+void ILayer::setData(std::vector<CSeriesData*>* data)
 {
     return;
 }
 
 ILayer::~ILayer()
 {
+}
+
+void ILayer::setBackgroundColor(CRGB color){
+    
 }

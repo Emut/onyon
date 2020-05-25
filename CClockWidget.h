@@ -10,16 +10,24 @@ public:
     CClockWidget();
     void Create(CBuffer<CRGB> itsCanvas);
     void Draw(CBuffer<CRGB> actCanvas);
-    void setData(std::vector<CSeriesData*> data);
+    void setData(std::vector<CSeriesData*>* data);
 
 private:
     void DrawDial(CBuffer<CRGB> actCanvas);
     void DrawHands(CBuffer<CRGB> actCanvas);
 
-    std::vector<CSeriesData*> m_itsData;
-    float hour;
-    float minute;
-    float second;
+    std::vector<CSeriesData*>* m_itsData;
+
+    struct HandData{
+        float time;
+        bool valid;
+        CRGB color;
+    };
+
+    HandData hour;
+    HandData minute;
+    HandData second;
+
 };
 
 #endif

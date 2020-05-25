@@ -2,6 +2,9 @@
 #include "DrawUtils.h"
 #include <string.h>
 
+CBackgroundManager::CBackgroundManager(){
+    m_bgColor = CRGB(255,255,255);
+}
 
 void CBackgroundManager::setTextProperties(WidgetTextFields *texts)
 {
@@ -10,7 +13,7 @@ void CBackgroundManager::setTextProperties(WidgetTextFields *texts)
 
 void CBackgroundManager::Draw(CBuffer<CRGB> buf)
 {
-    buf.Fill(CRGB(200,200,200));
+    buf.Fill(m_bgColor);
     m_activeCanvasArea = buf.getAreaRect();
     DrawUtils<CRGB>::DrawRectangle(buf,
                                    CRGB(0, 0, 0), CPoint<int>(0, 0),
@@ -32,4 +35,8 @@ void CBackgroundManager::Draw(CBuffer<CRGB> buf)
 
 CRect<int> CBackgroundManager::getActiveArea(){
     return m_activeCanvasArea;
+}
+
+void CBackgroundManager::setBackgroundColor(CRGB color){
+    m_bgColor = color;
 }

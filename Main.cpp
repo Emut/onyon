@@ -27,17 +27,28 @@ int main()
 
 	myCanvas.setWidgetTitle(clockWidget, "NICE CLOCK");
 	myCanvas.setWidgetTitle(clockWidget2, "HUGE CLOCK");
-	float timeData[] = {18, 32, 0};
-	int timeDataID = myCanvas.InsertData(clockWidget, timeData, timeData + 3);
-	int timeDataID2 = myCanvas.InsertData(clockWidget2, timeData, timeData + 3);
+	
+	float data = 10;
+	myCanvas.InsertData(clockWidget, &data, &data + 1);
+	data = 16;
+	myCanvas.InsertData(clockWidget2, &data, &data + 1);
+	data = 30;
+	myCanvas.InsertData(clockWidget, &data, &data + 1);
+	myCanvas.InsertData(clockWidget2, &data, &data + 1);
+	data = 45;
+	int timeDataSec1 = myCanvas.InsertData(clockWidget, &data, &data + 1);
+	int timeDataSec2 = myCanvas.InsertData(clockWidget2, &data, &data + 1);
+	myCanvas.setDataColor(clockWidget2,timeDataSec2,CRGB(255,255,255));
+	myCanvas.setWidgetBackgroundColor(clockWidget2,CRGB(128,128,0));
+	//int timeDataID2 = myCanvas.InsertData(clockWidget2, timeData, timeData + 3);
 	while (true)
 	{
-		timeData[2] += 1;
-		myCanvas.ReplaceData(clockWidget, timeDataID, timeData, timeData + 3);
+		data += 1;
+		myCanvas.ReplaceData(clockWidget, timeDataSec1, &data, &data + 1);
+		myCanvas.ReplaceData(clockWidget2, timeDataSec2, &data, &data + 1);
 		myCanvas.UpdateWidget(clockWidget);
-		myCanvas.ReplaceData(clockWidget2, timeDataID2, timeData, timeData + 3);
 		myCanvas.UpdateWidget(clockWidget2);
-		printf("a\n");
+		//printf("a\n");
 		//std::cin >> c;
 		//sleep(1);
 	}
