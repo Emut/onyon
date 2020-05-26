@@ -30,9 +30,24 @@ public:
 	CPoint<T> getBottomRight() { return m_BR; }
 	CPoint<T> getTopLeft() { return m_TL; }
 
-	CRect<T> operator +=(CPoint<T> rhs){
+	CRect<T> operator+=(CPoint<T> rhs)
+	{
 		m_TL = m_TL + rhs;
 		m_BR = m_BR + rhs;
 		return *this;
+	}
+
+	bool IsIn(CPoint<T> point)
+	{
+		if (m_TL.X() > point.X())
+			return false;
+		if (m_TL.Y() > point.Y())
+			return false;
+		if (m_BR.X() < point.X())
+			return false;
+		if (m_BR.Y() < point.Y())
+			return false;
+
+		return true;
 	}
 };

@@ -7,7 +7,7 @@
 class CWidgetFactory
 {
 public:
-    static ILayer *getLayer(const char *layerType);
+    static ILayer *getLayer(const char *layerType, const void* args);
 };
 
 #endif

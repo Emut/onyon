@@ -1,8 +1,15 @@
 #include "CBackgroundManager.h"
 #include "DrawUtils.h"
 #include <string.h>
+#include "CImageSaver.h"
 
-CBackgroundManager::CBackgroundManager(){
+CBackgroundManager::CBackgroundManager(const char* backgroundImageFile){
+    backgroundImageBuf = NULL;
+    if(backgroundImageFile != NULL){
+        const char* asd = backgroundImageFile;
+        std::string fileNameStr = backgroundImageFile;
+        CImageSaver::ReadFromPpm(backgroundImageBuf, fileNameStr);
+    }
     m_bgColor = CRGB(255,255,255);
 }
 

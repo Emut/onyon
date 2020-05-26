@@ -21,13 +21,28 @@ int main()
 	myCanvas.InsertLayer(clockWidget, "BackgroundManager");
 	myCanvas.InsertLayer(clockWidget, "AnalogClock");
 	
+	
 	int clockWidget2 = myCanvas.CreateWidget(CRect<int>(10, 220, 410, 610));
 	myCanvas.InsertLayer(clockWidget2, "BackgroundManager");
-	myCanvas.InsertLayer(clockWidget2, "AnalogClock");
+	int clockLayer = myCanvas.InsertLayer(clockWidget2, "AnalogClock");
+
+	int mkWidget = myCanvas.CreateWidget(CRect<int>(220, 10, 410, 210));
+	myCanvas.InsertLayer(mkWidget, "BackgroundManager", "image.ppm");
+	myCanvas.InsertLayer(mkWidget, "MouseKeyboardSample");
 
 	myCanvas.setWidgetTitle(clockWidget, "NICE CLOCK");
 	myCanvas.setWidgetTitle(clockWidget2, "HUGE CLOCK");
+
+	myCanvas.UpdateAllWidgets();
 	
+	int cmd = 0;
+	CRGB arg = CRGB(255,255,255);
+	myCanvas.ExecuteSpecialLayerCmd(clockWidget2, clockLayer, &cmd, &arg);
+	cmd = 1;
+	myCanvas.ExecuteSpecialLayerCmd(clockWidget2, clockLayer, &cmd, &arg);
+	cmd = 2;
+	myCanvas.ExecuteSpecialLayerCmd(clockWidget2, clockLayer, &cmd, &arg);
+
 	float data = 10;
 	myCanvas.InsertData(clockWidget, &data, &data + 1);
 	data = 16;
@@ -39,7 +54,7 @@ int main()
 	int timeDataSec1 = myCanvas.InsertData(clockWidget, &data, &data + 1);
 	int timeDataSec2 = myCanvas.InsertData(clockWidget2, &data, &data + 1);
 	myCanvas.setDataColor(clockWidget2,timeDataSec2,CRGB(255,255,255));
-	myCanvas.setWidgetBackgroundColor(clockWidget2,CRGB(128,128,0));
+	myCanvas.setWidgetBackgroundColor(clockWidget2,CRGB(0,0,0));
 	//int timeDataID2 = myCanvas.InsertData(clockWidget2, timeData, timeData + 3);
 	while (true)
 	{

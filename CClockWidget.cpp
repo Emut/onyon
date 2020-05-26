@@ -4,6 +4,9 @@
 CClockWidget::CClockWidget()
 {
     m_itsData = NULL;
+    m_dialOuterColor = CRGB(0, 255, 0);
+    m_dialInnerColor = CRGB(0, 255, 0);
+    m_numberColor = CRGB(255, 0, 0);
 }
 
 void CClockWidget::setData(std::vector<CSeriesData *> *data)
@@ -46,10 +49,10 @@ void CClockWidget::DrawDial(CBuffer<CRGB> actCanvas)
     CPoint<int> clockCenter(actCanvas.getWidth() / 2, actCanvas.getHeigth() / 2);
 
     int outerRad = std::min(actCanvas.getWidth(), actCanvas.getHeigth()) / 2 - 5;
-    DrawUtils<CRGB>::DrawCircle(actCanvas, CRGB(0, 255, 0),
+    DrawUtils<CRGB>::DrawCircle(actCanvas, m_dialInnerColor,
                                 clockCenter, 10);
 
-    DrawUtils<CRGB>::DrawCircle(actCanvas, CRGB(0, 255, 0),
+    DrawUtils<CRGB>::DrawCircle(actCanvas, m_dialOuterColor,
                                 clockCenter, outerRad);
 
     int numberRadius = outerRad - 10;
@@ -64,7 +67,7 @@ void CClockWidget::DrawDial(CBuffer<CRGB> actCanvas)
         sprintf(numberText, "%d", i);
         CPoint<int> textSize = DrawUtils<CRGB>::getStringSize(numberText);
         CPoint<int> textTopLeft = textCenter - (textSize / 2);
-        DrawUtils<CRGB>::DrawString(actCanvas, CRGB(255, 0, 0), textTopLeft, numberText);
+        DrawUtils<CRGB>::DrawString(actCanvas, m_numberColor, textTopLeft, numberText);
     }
 }
 void CClockWidget::DrawHands(CBuffer<CRGB> actCanvas)
@@ -107,5 +110,24 @@ void CClockWidget::DrawHands(CBuffer<CRGB> actCanvas)
                                   clockCenter.X() - 1, clockCenter.Y(), hourLenCoeff * outerRad, hourAngle);
         DrawUtils<CRGB>::DrawLine(actCanvas, hour.color,
                                   clockCenter.X() + 1, clockCenter.Y(), hourLenCoeff * outerRad, hourAngle);
+    }
+}
+
+void CClockWidget::SpecialCommand(void *command, void *args)
+{
+    int commandID = *((int *)command);
+    switch (commandID)
+    {
+    case 0:
+        m_numberColor = *((CRGB *)args);
+        break;
+    
+    case 1:
+        m_dialInnerColor = *((CRGB *)args);
+        break;
+    
+    case 2:
+        m_dialOuterColor = *((CRGB *)args);
+        break;
     }
 }

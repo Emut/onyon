@@ -19,7 +19,7 @@ void ILayer::setTextProperties(WidgetTextFields *textFields)
     return;
 }
 
-void ILayer::setData(std::vector<CSeriesData*>* data)
+void ILayer::setData(std::vector<CSeriesData *> *data)
 {
     return;
 }
@@ -28,6 +28,19 @@ ILayer::~ILayer()
 {
 }
 
-void ILayer::setBackgroundColor(CRGB color){
-    
+void ILayer::setBackgroundColor(CRGB color)
+{
+}
+
+bool ILayer::MouseMove(int x, int y)
+{
+    return false;
+}
+bool ILayer::KeyPress(unsigned char key, bool pressed)
+{
+    return false;
+}
+bool ILayer::MousePress(int x, int y, unsigned char key, bool pressed)
+{
+    return false;
 }

@@ -25,11 +25,19 @@ public:
 
     virtual void setBackgroundColor(CRGB color);
 
+    //update functions for mouse and keyboard functions
+    //if layer returns true, it means layer is updated 
+    //and would need to be refreshed (i.e. redrawn)
+    virtual bool MouseMove(int x, int y);
+    virtual bool KeyPress(unsigned char key, bool pressed);
+    virtual bool MousePress(int x, int y, unsigned char key, bool pressed);
+
     //because the layers vary greatly in purpose, a generic
     //function to execute special functions through the interface
     virtual void SpecialCommand(void *command, void *args);
 
     virtual ~ILayer();
 };
+
 
 #endif

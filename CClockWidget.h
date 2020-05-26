@@ -11,6 +11,7 @@ public:
     void Create(CBuffer<CRGB> itsCanvas);
     void Draw(CBuffer<CRGB> actCanvas);
     void setData(std::vector<CSeriesData*>* data);
+    void SpecialCommand(void *command, void *args);
 
 private:
     void DrawDial(CBuffer<CRGB> actCanvas);
@@ -27,7 +28,11 @@ private:
     HandData hour;
     HandData minute;
     HandData second;
-
+    CRGB m_dialOuterColor;
+    CRGB m_dialInnerColor;
+    CRGB m_numberColor;
 };
+
+
 
 #endif

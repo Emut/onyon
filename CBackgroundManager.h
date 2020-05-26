@@ -9,7 +9,7 @@
 class CBackgroundManager: public ILayer
 {
 public:
-    CBackgroundManager();
+    CBackgroundManager(const char* backgroundImageFile = NULL);
 
     void Draw(CBuffer<CRGB> buf);
     void setTextProperties(WidgetTextFields* texts);
@@ -20,6 +20,7 @@ private:
     WidgetTextFields* m_textFields;
     CRect<int> m_activeCanvasArea;
     CRGB m_bgColor;
+    CBuffer<CRGB>* backgroundImageBuf;
 
     //disallow cc and assignment op
     //const CBackgroundManager operator=(const CBackgroundManager &);

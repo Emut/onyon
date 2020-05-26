@@ -2,16 +2,17 @@
 #include "CClockWidget.h"
 #include "CLineGraph.h"
 #include "CBackgroundManager.h"
+#include "CMouseKeyboardSampleLayer.h"
 
 #include <string.h>
-ILayer *CWidgetFactory::getLayer(const char *widgetType)
+ILayer *CWidgetFactory::getLayer(const char *widgetType, const void* args)
 {
     ILayer *createdInstance = NULL;
     do
     {
         if (strcmp(widgetType, "BackgroundManager") == 0)
         {
-            createdInstance = new CBackgroundManager();
+            createdInstance = new CBackgroundManager((const char*)args);
             break;
         }
         if (strcmp(widgetType, "AnalogClock") == 0)
@@ -24,6 +25,11 @@ ILayer *CWidgetFactory::getLayer(const char *widgetType)
             createdInstance = new CLineGraph();
             break;
         }*/
+        if (strcmp(widgetType, "MouseKeyboardSample") == 0)
+        {
+            createdInstance = new CMouseKeyboardSampleLayer();
+            break;
+        }
         //matches nothing
         return NULL;
     } while (false);
