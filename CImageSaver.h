@@ -65,30 +65,62 @@ public:
 	}
 
 	template <class T>
-	static bool ReadFromPpm(CBuffer<T>* buf, const std::string fileNameStr)
+	static bool ReadFromPpm(CBuffer<T> *buf, const std::string fileNameStr)
 	{
-		const char* fileName = fileNameStr.c_str();
+		const char *fileName = fileNameStr.c_str();
 		FILE *filep = NULL;
 		filep = fopen(fileName, "rb");
 		if (filep == NULL)
 			return false;
-		char temp[5];
-		fread(temp, 1, 3, filep);
-		if(strcmp(temp, "P6") != 0){
+		char temp[2];
+		fread(temp, 1, 2, filep);
+		//check header
+		if (temp[0] != 'P' || temp[1] != '6')
+		{
 			//file format is wrong
 			fclose(filep);
 			return false;
 		}
-		int width = 0;
-		int heigth = 0;
-		int depth = 0;
 
-		int read = fscanf(filep, "%d\n%d\n%d\n", &width, &heigth, &depth);
-		if(read != 3){
-			fclose(filep);
-			return false;
+		char readVal = 0;
+		//array to hold width heigth and depth
+		int whd[3];
+		for(int i = 0; i < 4; ++i)
+		{
+		//consume all whitespace
+		while (true)
+		{
+			fread(&readVal, 1, 1, filep);
+			if (readVal == ' ' || readVal == '\n' || readVal == '\r' || readVal == '\t')
+			{
+				continue;
+			}
+			//go back once to point beginning of ascii num
+			fseek(filep, -1, SEEK_CUR);
+			break;
 		}
-		fprintf(filep, "%d,%d,%d", width, heigth, depth);
+		if(i == 3)
+			break;
+			
+		fscanf(filep, "%d", whd+i);
+		}
+
+		buf = new CBuffer<T>(whd[0], whd[1]);
+
+		for(int row = 0; row < whd[1]; ++row){
+			for(int col = 0; col < whd[0]; ++col){
+				T readPixel;
+				unsigned char readVal;
+				fread(&readVal, 1, 1, filep);
+				readPixel.setRed(readVal);
+				fread(&readVal, 1, 1, filep);
+				readPixel.setGreen(readVal);
+				fread(&readVal, 1, 1, filep);
+				readPixel.setBlue(readVal);
+				buf->getElmRef(col, row) = readPixel;
+			}
+		}
+		SaveAsPpm(*buf, "denemeee.ppm");
 		fclose(filep);
 		return false;
 	}
