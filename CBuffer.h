@@ -97,12 +97,33 @@ public:
 		return m_stride;
 	}
 
-	CPoint<int> getSize(){
+	CPoint<int> getSize()
+	{
 		return CPoint<int>(m_width, m_heigth);
 	}
 
-	CRect<int> getAreaRect(){
-		return CRect<int>(0, 0, m_heigth-1, m_width-1);
+	CRect<int> getAreaRect()
+	{
+		return CRect<int>(0, 0, m_heigth - 1, m_width - 1);
+	}
+
+	void CopyFrom(CBuffer<T> &source)
+	{
+		int copyWidth = std::min(m_width, source.m_width);
+		int copyHeigth = std::min(m_heigth, source.m_heigth);
+
+		T *pdest = m_itsBuffer;
+		T *psource = source.m_itsBuffer;
+		int destShifter = m_stride;
+		int srcShifter = source.m_stride;
+
+		int copySize = sizeof(T)*copyWidth;
+		for (int i = 0; i < copyHeigth; ++i)
+		{
+			memcpy(pdest, psource, copySize);
+			pdest += destShifter;
+			psource += srcShifter;
+		}
 	}
 
 private:

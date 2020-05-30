@@ -65,7 +65,7 @@ public:
 	}
 
 	template <class T>
-	static bool ReadFromPpm(CBuffer<T> *buf, const std::string fileNameStr)
+	static bool ReadFromPpm(CBuffer<T> *&buf, const std::string fileNameStr)
 	{
 		const char *fileName = fileNameStr.c_str();
 		FILE *filep = NULL;
@@ -120,8 +120,8 @@ public:
 				buf->getElmRef(col, row) = readPixel;
 			}
 		}
-		SaveAsPpm(*buf, "denemeee.ppm");
+		
 		fclose(filep);
-		return false;
+		return true;
 	}
 };

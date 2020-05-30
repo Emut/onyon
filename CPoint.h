@@ -20,6 +20,13 @@ public:
 		return CPoint<T>(X() / denominator, Y() / denominator);
 	}
 
+	void ShiftX(int shiftBy){
+		m_x += shiftBy;
+	}
+
+	void ShiftY(int shiftBy){
+		m_y += shiftBy;
+	}
 
 private:
 	T m_x;

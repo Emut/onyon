@@ -146,6 +146,11 @@ public:
 		DrawUtils<T>::DrawLine(buf, fill, TopLeft.X(), BottomRight.Y(), BottomRight.X(), BottomRight.Y());
 		DrawUtils<T>::DrawLine(buf, fill, BottomRight.X(), TopLeft.Y(), BottomRight.X(), BottomRight.Y());
 	}
+
+	static void DrawRectangle(CBuffer<T> &buf, const T fill, CRect<int> rect)
+	{
+		DrawRectangle(buf, fill, rect.getTopLeft(), rect.getBottomRight());
+	}
 };
 
 #endif

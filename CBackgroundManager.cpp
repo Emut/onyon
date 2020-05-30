@@ -6,7 +6,7 @@
 CBackgroundManager::CBackgroundManager(const char* backgroundImageFile){
     backgroundImageBuf = NULL;
     if(backgroundImageFile != NULL){
-        const char* asd = backgroundImageFile;
+        //const char* asd = backgroundImageFile;
         std::string fileNameStr = backgroundImageFile;
         CImageSaver::ReadFromPpm(backgroundImageBuf, fileNameStr);
     }
@@ -20,11 +20,18 @@ void CBackgroundManager::setTextProperties(WidgetTextFields *texts)
 
 void CBackgroundManager::Draw(CBuffer<CRGB> buf)
 {
-    buf.Fill(m_bgColor);
+    if(backgroundImageBuf != NULL)
+        buf.CopyFrom(*backgroundImageBuf);
+    else
+        buf.Fill(m_bgColor);
     m_activeCanvasArea = buf.getAreaRect();
     DrawUtils<CRGB>::DrawRectangle(buf,
-                                   CRGB(0, 0, 0), CPoint<int>(0, 0),
-                                   buf.getSize() - CPoint<int>(1, 1));
+                                   CRGB(0, 0, 0), buf.getAreaRect());
+    
+    m_activeCanvasArea.ShiftTop(1);
+    m_activeCanvasArea.ShiftLeft(1);
+    m_activeCanvasArea.ShiftBottom(-1);
+    m_activeCanvasArea.ShiftRight(-1);
 
     if (m_textFields->titleText.getText() != NULL)
     {
@@ -35,7 +42,7 @@ void CBackgroundManager::Draw(CBuffer<CRGB> buf)
             m_textFields->titleText.pos.Y() = 1;
         }
         DrawUtils<CRGB>::DrawString(buf, m_textFields->titleText.color, m_textFields->titleText.pos, m_textFields->titleText.getText());
-        m_activeCanvasArea.setTop(titleSize.Y() + 1);
+        m_activeCanvasArea.ShiftTop(titleSize.Y() + 1);
     }
     return;
 }

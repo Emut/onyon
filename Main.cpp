@@ -18,16 +18,16 @@ int main()
 	CCanvas myCanvas(640, 480);
 	myCanvas.DisplayOnScreen(true, "myWindow");
 	int clockWidget = myCanvas.CreateWidget(CRect<int>(10, 10, 210, 210));
-	myCanvas.InsertLayer(clockWidget, "BackgroundManager");
+	myCanvas.InsertLayer(clockWidget, "BackgroundManager", "onion.ppm");
 	myCanvas.InsertLayer(clockWidget, "AnalogClock");
 	
 	
 	int clockWidget2 = myCanvas.CreateWidget(CRect<int>(10, 220, 410, 610));
-	myCanvas.InsertLayer(clockWidget2, "BackgroundManager");
+	myCanvas.InsertLayer(clockWidget2, "BackgroundManager", "onion.ppm");
 	int clockLayer = myCanvas.InsertLayer(clockWidget2, "AnalogClock");
 
 	int mkWidget = myCanvas.CreateWidget(CRect<int>(220, 10, 410, 210));
-	myCanvas.InsertLayer(mkWidget, "BackgroundManager", "image.ppm");
+	myCanvas.InsertLayer(mkWidget, "BackgroundManager", "onion.ppm");
 	myCanvas.InsertLayer(mkWidget, "MouseKeyboardSample");
 
 	myCanvas.setWidgetTitle(clockWidget, "NICE CLOCK");
@@ -63,6 +63,7 @@ int main()
 		myCanvas.ReplaceData(clockWidget2, timeDataSec2, &data, &data + 1);
 		myCanvas.UpdateWidget(clockWidget);
 		myCanvas.UpdateWidget(clockWidget2);
+		sleep(1);
 		//printf("a\n");
 		//std::cin >> c;
 		//sleep(1);

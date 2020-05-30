@@ -3,7 +3,6 @@
 
 void CMouseKeyboardSampleLayer::Draw(CBuffer<CRGB> buf)
 {
-    //buf.Fill(CRGB(255,255,255));
     char toWrite[30];
     sprintf(toWrite, "MOUSE@%d,%d", m_MousePos.X(), m_MousePos.Y());
     DrawUtils<CRGB>::DrawString(buf, CRGB(255,0,0), CPoint<int>(0,0), toWrite);
@@ -24,4 +23,7 @@ bool CMouseKeyboardSampleLayer::KeyPress(unsigned char key, bool pressed)
     return true;
 }
 
-CMouseKeyboardSampleLayer::CMouseKeyboardSampleLayer(): m_MousePos(0,0){}
+CMouseKeyboardSampleLayer::CMouseKeyboardSampleLayer(): m_MousePos(0,0){
+    m_key = 0;
+    m_isPressed = false;
+}

@@ -50,4 +50,20 @@ public:
 
 		return true;
 	}
+
+	void ShiftTop(int shiftBy){
+		m_TL.ShiftY(shiftBy);
+	}
+
+	void ShiftLeft(int shiftBy){
+		m_TL.ShiftX(shiftBy);
+	}
+
+	void ShiftBottom(int shiftBy){
+		m_BR.ShiftY(shiftBy);
+	}
+
+	void ShiftRight(int shiftBy){
+		m_BR.ShiftX(shiftBy);
+	}
 };
