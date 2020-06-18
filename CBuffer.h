@@ -45,7 +45,7 @@ public:
 
 	const CBuffer<T> operator=(const CBuffer<T> rhs)
 	{
-		if (m_itsBuffer != NULL)
+		if (m_isSelfCreated && m_itsBuffer != NULL)
 			delete[] m_itsBuffer;
 		m_itsBuffer = rhs.m_itsBuffer;
 		m_stride = rhs.m_stride;

@@ -37,7 +37,7 @@ int CCanvas::CreateWidget(CRect<int> position)
     return widgetID;
 }
 
-int CCanvas::InsertLayer(int widgetID, const char *layerType, const void* args)
+int CCanvas::InsertLayer(int widgetID, const char *layerType, const void *args)
 {
     if (m_itsWidgets.size() <= widgetID)
         return -1; //widget does not exist.
@@ -50,57 +50,58 @@ int CCanvas::InsertLayer(int widgetID, const char *layerType, const void* args)
     return m_itsWidgets[widgetID].size() - 1;
 }
 
-int CCanvas::InsertData(int widgetID, float *begin, float *end)
-{
-    if (m_itsWidgets.size() <= widgetID)
-        return -1;
+// int CCanvas::InsertData(int widgetID, float *begin, float *end)
+// {
+//     if (m_itsWidgets.size() <= widgetID)
+//         return -1;
 
-    int newDataID = m_itsData[widgetID].size();
-    CSeriesData *newSeries = new CSeriesData();
-    m_itsData[widgetID].push_back(newSeries);
+//     int newDataID = m_itsData[widgetID].size();
+//     CSeriesData *newSeries = new CSeriesData();
+//     m_itsData[widgetID].push_back(newSeries);
 
-    int dataCount = 0;
-    for (float *it = begin; it != end; ++it)
-    {
-        ++dataCount;
-    }
-    newSeries->dataCount = dataCount;
-    newSeries->id = newDataID;
-    newSeries->ydata = new float[dataCount];
-    newSeries->xdata = new float[dataCount];
-    int i = 0;
-    for (float *it = begin; it != end; ++it)
-    {
-        newSeries->ydata[i++] = *it;
-    }
+//     int dataCount = 0;
+//     for (float *it = begin; it != end; ++it)
+//     {
+//         ++dataCount;
+//     }
+//     newSeries->dataCount = dataCount;
+//     newSeries->id = newDataID;
+//     newSeries->ydata = new float[dataCount];
+//     newSeries->xdata = new float[dataCount];
+//     int i = 0;
+//     for (float *it = begin; it != end; ++it)
+//     {
+//         newSeries->ydata[i++] = *it;
+//     }
 
-    return newDataID;
-}
+//     return newDataID;
+// }
 
 int CCanvas::ReplaceData(int widgetID, int dataID, float *begin, float *end)
 {
-    if (m_itsWidgets.size() <= widgetID)
-        return -1;
-    //if said data does not exist, insert it
-    if (m_itsData[widgetID].size() <= dataID)
-        return InsertData(widgetID, begin, end);
+    return -1;
+    // if (m_itsWidgets.size() <= widgetID)
+    //     return -1;
+    // //if said data does not exist, insert it
+    // if (m_itsData[widgetID].size() <= dataID)
+    //     return InsertData(widgetID, begin, end);
 
-    int dataCount = 0;
-    for (float *it = begin; it != end; ++it)
-    {
-        ++dataCount;
-    }
-    //if new and old data are at the same size, omit deletion
-    //just overwrite
-    if (dataCount == m_itsData[widgetID][dataID]->dataCount)
-    {
-        int i = 0;
-        for (float *it = begin; it != end; ++it)
-        {
-            m_itsData[widgetID][dataID]->ydata[i++] = *it;
-        }
-    }
-    return dataID;
+    // int dataCount = 0;
+    // for (float *it = begin; it != end; ++it)
+    // {
+    //     ++dataCount;
+    // }
+    // //if new and old data are at the same size, omit deletion
+    // //just overwrite
+    // if (dataCount == m_itsData[widgetID][dataID]->dataCount)
+    // {
+    //     int i = 0;
+    //     for (float *it = begin; it != end; ++it)
+    //     {
+    //         m_itsData[widgetID][dataID]->ydata[i++] = *it;
+    //     }
+    // }
+    // return dataID;
 }
 
 bool CCanvas::UpdateWidget(int widgetID)
@@ -109,19 +110,25 @@ bool CCanvas::UpdateWidget(int widgetID)
         return false;
 
     CRect<int> drawArea = m_widgetAreas[widgetID];
+    CPoint<int> topLeft(0, 0);
+    CBuffer<CRGB> drawBuffer(m_itsCanvas, drawArea);
     for (int j = 0; j < m_itsWidgets[widgetID].size(); ++j)
     {
         ILayer *currentLayer = m_itsWidgets[widgetID][j];
         currentLayer->setData(&m_itsData[widgetID]);
         currentLayer->setTextProperties(&m_widgetTexts[widgetID]);
-        currentLayer->Draw(CBuffer<CRGB>(m_itsCanvas, drawArea));
+        drawArea += topLeft;
+        currentLayer->Draw(drawBuffer);
         drawArea = currentLayer->getActiveArea();
-        int w = drawArea.getWidth();
-        int h = drawArea.getHeigth();
         if (drawArea.getHeigth() <= 0 || drawArea.getWidth() <= 0)
         {
             break;
         }
+        topLeft = topLeft + drawArea.getTopLeft();
+        drawBuffer = CBuffer<CRGB>(drawBuffer, drawArea);
+        int w = drawArea.getWidth();
+        int h = drawArea.getHeigth();
+
         drawArea += m_widgetAreas[widgetID].getTopLeft();
     }
 
@@ -147,6 +154,24 @@ bool CCanvas::setWidgetTitle(int widgetID, const char *titleText)
         return false;
 
     m_widgetTexts[widgetID].titleText.setText(titleText);
+    return true;
+}
+
+bool CCanvas::setxAxisLabel(int widgetID, const char *labelText)
+{
+    if (m_widgetTexts.size() <= widgetID)
+        return false;
+
+    m_widgetTexts[widgetID].xAxisText.setText(labelText);
+    return true;
+}
+
+bool CCanvas::setyAxisLabel(int widgetID, const char *labelText)
+{
+    if (m_widgetTexts.size() <= widgetID)
+        return false;
+
+    m_widgetTexts[widgetID].yAxisText.setText(labelText);
     return true;
 }
 

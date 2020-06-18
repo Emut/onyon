@@ -10,6 +10,7 @@ class CBackgroundManager: public ILayer
 {
 public:
     CBackgroundManager(const char* backgroundImageFile = NULL);
+    ~CBackgroundManager();
 
     void Draw(CBuffer<CRGB> buf);
     void setTextProperties(WidgetTextFields* texts);

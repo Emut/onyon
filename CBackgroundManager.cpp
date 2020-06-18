@@ -54,3 +54,8 @@ CRect<int> CBackgroundManager::getActiveArea(){
 void CBackgroundManager::setBackgroundColor(CRGB color){
     m_bgColor = color;
 }
+
+CBackgroundManager::~CBackgroundManager(){
+    if(backgroundImageBuf != NULL)
+        delete backgroundImageBuf;
+}

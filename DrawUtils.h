@@ -51,8 +51,12 @@ public:
 			}
 		}
 	}
-
-	static void DrawLine(CBuffer<T> &buf, const T fill, int x, int y, int length, float radAngle)
+	
+	static void DrawLine(CBuffer<T> &buf, const T fill, CPoint<float> begin, CPoint<float> end)
+	{
+		DrawLine(buf, fill, begin.X(), begin.Y(), end.X(), end.Y());
+	}
+	static void DrawLineAngle(CBuffer<T> &buf, const T fill, int x, int y, int length, float radAngle)
 	{
 		int endX = x +  ROUND(length*cos(radAngle));
 		int endY = y + ROUND(length*sin(radAngle));

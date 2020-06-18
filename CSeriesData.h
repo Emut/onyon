@@ -9,12 +9,14 @@ public:
     int id;
     float y_min, y_max, x_min, x_max;
     CRGB color;
-    int dataCount;
+    int xdataCount;
+    int ydataCount;
     float *ydata, *xdata;
     CSeriesData();
     ~CSeriesData();
     CSeriesData(const CSeriesData &);
     CSeriesData &operator=(const CSeriesData &);
+    void CalculateMaxima(); 
 };
 
 #endif

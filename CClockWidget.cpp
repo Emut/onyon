@@ -86,29 +86,29 @@ void CClockWidget::DrawHands(CBuffer<CRGB> actCanvas)
     if (second.valid)
     {
         float secAngle = 3.14f * second.time / 30 - 1.57f;
-        DrawUtils<CRGB>::DrawLine(actCanvas, second.color,
+        DrawUtils<CRGB>::DrawLineAngle(actCanvas, second.color,
                                   clockCenter.X(), clockCenter.Y(), secLenCoeff * outerRad, secAngle);
     }
 
     if (minute.valid)
     {
         float minAngle = 3.14f * shiftedMinute / 30 - 1.57f;
-        DrawUtils<CRGB>::DrawLine(actCanvas, minute.color,
+        DrawUtils<CRGB>::DrawLineAngle(actCanvas, minute.color,
                                   clockCenter.X(), clockCenter.Y(), minLenCoeff * outerRad, minAngle);
-        DrawUtils<CRGB>::DrawLine(actCanvas, minute.color,
+        DrawUtils<CRGB>::DrawLineAngle(actCanvas, minute.color,
                                   clockCenter.X() - 1, clockCenter.Y(), minLenCoeff * outerRad, minAngle);
-        DrawUtils<CRGB>::DrawLine(actCanvas, minute.color,
+        DrawUtils<CRGB>::DrawLineAngle(actCanvas, minute.color,
                                   clockCenter.X() + 1, clockCenter.Y(), minLenCoeff * outerRad, minAngle);
     }
 
     if (hour.valid)
     {
         float hourAngle = 3.14f * shiftedHour / 6 - 1.57f;
-        DrawUtils<CRGB>::DrawLine(actCanvas, hour.color,
+        DrawUtils<CRGB>::DrawLineAngle(actCanvas, hour.color,
                                   clockCenter.X(), clockCenter.Y(), hourLenCoeff * outerRad, hourAngle);
-        DrawUtils<CRGB>::DrawLine(actCanvas, hour.color,
+        DrawUtils<CRGB>::DrawLineAngle(actCanvas, hour.color,
                                   clockCenter.X() - 1, clockCenter.Y(), hourLenCoeff * outerRad, hourAngle);
-        DrawUtils<CRGB>::DrawLine(actCanvas, hour.color,
+        DrawUtils<CRGB>::DrawLineAngle(actCanvas, hour.color,
                                   clockCenter.X() + 1, clockCenter.Y(), hourLenCoeff * outerRad, hourAngle);
     }
 }
