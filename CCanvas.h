@@ -21,7 +21,7 @@ public:
     template <class IterY>
     int InsertData(int widgetID, IterY y_begin, IterY y_end)
     {
-        float* dummy = NULL;
+        float *dummy = NULL;
         return InsertData(widgetID, y_begin, y_end, dummy, dummy);
     }
 
@@ -42,7 +42,7 @@ public:
             ++dataCount;
         }
         newSeries->ydataCount = dataCount;
-        if(dataCount != 0)
+        if (dataCount != 0)
             newSeries->ydata = new float[dataCount];
 
         dataCount = 0;
@@ -51,7 +51,7 @@ public:
             ++dataCount;
         }
         newSeries->xdataCount = dataCount;
-        if(dataCount != 0)
+        if (dataCount != 0)
             newSeries->xdata = new float[dataCount];
 
         int i = 0;
@@ -67,6 +67,10 @@ public:
         }
 
         newSeries->CalculateMaxima();
+        char colorMask = newDataID%6 + 1;
+        newSeries->color.setRed(colorMask&1?255:0);
+        newSeries->color.setBlue(colorMask&2?255:0);
+        newSeries->color.setGreen(colorMask&4?255:0);
         return newDataID;
     }
 
@@ -75,6 +79,7 @@ public:
 
     bool setWidgetBackgroundColor(int widgetID, CRGB color);
     bool setDataColor(int widgetID, int dataID, CRGB color);
+    bool setDataName(int widgetID, int dataID, const char* name);
     bool ExecuteSpecialLayerCmd(int widgetID, int layerID, void *command, void *args);
 
     bool DisplayOnScreen(bool enable, const char *screenName);

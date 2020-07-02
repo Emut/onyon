@@ -18,7 +18,6 @@ CRect<int> C2dPlotAxisHandler::getActiveArea()
 
 void C2dPlotAxisHandler::Draw(CBuffer<CRGB> buf)
 {
-    buf.Fill(CRGB(255, 255, 0));
     m_activeArea = buf.getAreaRect();
 
     if (m_texts->xAxisText.getText() != NULL)

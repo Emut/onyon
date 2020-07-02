@@ -175,6 +175,18 @@ bool CCanvas::setyAxisLabel(int widgetID, const char *labelText)
     return true;
 }
 
+bool CCanvas::setDataName(int widgetID, int dataID, const char* name)
+{
+    if (m_itsWidgets.size() <= widgetID)
+        return false;
+
+    if (m_itsData[widgetID].size() <= dataID)
+        return false;
+
+    m_itsData[widgetID][dataID]->setName(name);
+    return true;
+}
+
 bool CCanvas::setDataColor(int widgetID, int dataID, CRGB color)
 {
     if (m_itsWidgets.size() <= widgetID)

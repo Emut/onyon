@@ -5,8 +5,7 @@ CLineGraph::CLineGraph() {}
 
 void CLineGraph::Draw(CBuffer<CRGB> buf)
 {
-    //buf.Fill(CRGB(255, 0, 0));
-    //return;
+    m_activeArea = buf.getAreaRect();
     if (m_data->size() == 0)
         return;
     //find the overall maxima for all series
@@ -67,8 +66,13 @@ void CLineGraph::setData(std::vector<CSeriesData *> *data)
 CPoint<float> CLineGraph::NormalizePoint(CRect<float> areaFrom, CRect<int> areaTo, CPoint<float> point)
 {
     CPoint<float> retVal(0, 0);
-    retVal.X() = (point.X() - areaFrom.getLeft()) / (areaFrom.getWidth()-1) * (areaTo.getWidth() - 1);
-    retVal.Y() = (point.Y() - areaFrom.getTop()) / (areaFrom.getHeigth() -1) * (areaTo.getHeigth() - 1);
+    retVal.X() = (point.X() - areaFrom.getLeft()) / (areaFrom.getWidth() - 1) * (areaTo.getWidth() - 1);
+    retVal.Y() = (point.Y() - areaFrom.getTop()) / (areaFrom.getHeigth() - 1) * (areaTo.getHeigth() - 1);
 
     return retVal;
+}
+
+CRect<int> CLineGraph::getActiveArea()
+{
+    return m_activeArea;
 }

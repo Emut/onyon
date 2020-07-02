@@ -4,6 +4,7 @@
 #include "CBackgroundManager.h"
 #include "CMouseKeyboardSampleLayer.h"
 #include "C2dPlotAxisHandler.h"
+#include "CLegendHandler.h"
 
 #include <string.h>
 ILayer *CWidgetFactory::getLayer(const char *widgetType, const void *args)
@@ -37,6 +38,12 @@ ILayer *CWidgetFactory::getLayer(const char *widgetType, const void *args)
         if (strcmp(widgetType, "2dAxisHandler") == 0)
         {
             createdInstance = new C2dPlotAxisHandler();
+            break;
+        }
+
+        if (strcmp(widgetType, "LegendHandler") == 0)
+        {
+            createdInstance = new CLegendHandler();
             break;
         }
         //matches nothing

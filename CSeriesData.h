@@ -12,11 +12,13 @@ public:
     int xdataCount;
     int ydataCount;
     float *ydata, *xdata;
+    char* name;
     CSeriesData();
     ~CSeriesData();
     CSeriesData(const CSeriesData &);
     CSeriesData &operator=(const CSeriesData &);
     void CalculateMaxima(); 
+    void setName(const char* name);
 };
 
 #endif

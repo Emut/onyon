@@ -11,10 +11,12 @@ public:
     void Draw(const std::vector<CSeriesData*>& data);
     void Draw(CBuffer<CRGB> buf);
     void setData(std::vector<CSeriesData*>* data);
+    CRect<int> getActiveArea();
 
 private:
     std::vector<CSeriesData*>* m_data;
     CPoint<float> NormalizePoint(CRect<float> areaFrom, CRect<int> areaTo, CPoint<float> point);
+    CRect<int> m_activeArea;
 };
 
 #endif

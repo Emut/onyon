@@ -22,9 +22,10 @@ int main()
 	myCanvas.InsertLayer(clockWidget, "AnalogClock");
 
 	int clockWidget2 = myCanvas.CreateWidget(CRect<int>(10, 220, 410, 610));
-	myCanvas.InsertLayer(clockWidget2, "BackgroundManager", "onion.ppm");
+	myCanvas.InsertLayer(clockWidget2, "BackgroundManager");
 	myCanvas.InsertLayer(clockWidget2, "2dAxisHandler");
 	int clockLayer = myCanvas.InsertLayer(clockWidget2, "LineGraph");
+	myCanvas.InsertLayer(clockWidget2, "LegendHandler");
 
 	int mkWidget = myCanvas.CreateWidget(CRect<int>(220, 10, 410, 210));
 	myCanvas.InsertLayer(mkWidget, "BackgroundManager", "onion.ppm");
@@ -64,7 +65,20 @@ int main()
 		int y = ROUND(-sinVal * 50 + 100);
 		vecty.push_back(y);
 	}
-	myCanvas.InsertData(clockWidget2, vecty.begin(), vecty.end());
+	int sinLine = myCanvas.InsertData(clockWidget2, vecty.begin(), vecty.end());
+	myCanvas.setDataName(clockWidget2, sinLine, "SINE WAVE");
+	vecty.clear();
+	vectx.clear();
+	for (int i = 0; i < 600; i += 10)
+	{
+		vectx.push_back(i);
+		float radX = float(i) * 3.14f / 180;
+		float sinVal = sin(radX);
+		int y = ROUND(-sinVal * 50 + 100);
+		vecty.push_back(y);
+	}
+	int cosLine = myCanvas.InsertData(clockWidget2, vecty.begin(), vecty.end());
+	myCanvas.setDataName(clockWidget2, cosLine, "COS WAWE");
 	//myCanvas.setDataColor(clockWidget2, timeDataSec2, CRGB(255, 255, 255));
 	//myCanvas.setWidgetBackgroundColor(clockWidget2, CRGB(0, 0, 0));
 	//int timeDataID2 = myCanvas.InsertData(clockWidget2, timeData, timeData + 3);
@@ -72,7 +86,7 @@ int main()
 	{
 		data += 1;
 		myCanvas.ReplaceData(clockWidget, timeDataSec1, &data, &data + 1);
-	//	myCanvas.ReplaceData(clockWidget2, timeDataSec2, &data, &data + 1);
+		//	myCanvas.ReplaceData(clockWidget2, timeDataSec2, &data, &data + 1);
 		myCanvas.UpdateWidget(clockWidget);
 		myCanvas.UpdateWidget(clockWidget2);
 		sleep(1);
