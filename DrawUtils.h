@@ -51,15 +51,15 @@ public:
 			}
 		}
 	}
-	
+
 	static void DrawLine(CBuffer<T> &buf, const T fill, CPoint<float> begin, CPoint<float> end)
 	{
 		DrawLine(buf, fill, begin.X(), begin.Y(), end.X(), end.Y());
 	}
 	static void DrawLineAngle(CBuffer<T> &buf, const T fill, int x, int y, int length, float radAngle)
 	{
-		int endX = x +  ROUND(length*cos(radAngle));
-		int endY = y + ROUND(length*sin(radAngle));
+		int endX = x + ROUND(length * cos(radAngle));
+		int endY = y + ROUND(length * sin(radAngle));
 
 		DrawLine(buf, fill, x, y, endX, endY);
 	}
@@ -154,6 +154,51 @@ public:
 	static void DrawRectangle(CBuffer<T> &buf, const T fill, CRect<int> rect)
 	{
 		DrawRectangle(buf, fill, rect.getTopLeft(), rect.getBottomRight());
+	}
+
+	static void DrawArc(CBuffer<T> &buf, const T fill, CPoint<int> center, int radius, float startAngle, float endAngle)
+	{
+		CPoint<int> pntStart(center.X() + ROUND(radius * cos(startAngle)), center.Y() + ROUND(radius * sin(startAngle)));
+		CPoint<int> pntEnd(center.X() + ROUND(radius * cos(endAngle)), center.Y() + ROUND(radius * sin(endAngle)));
+		float midAngle = startAngle + endAngle;
+		midAngle /= 2;
+		CPoint<int> pntMid(center.X() + ROUND(radius * cos(midAngle)), center.Y() + ROUND(radius * sin(midAngle)));
+		if (pntMid == pntStart || pntMid == pntEnd)
+			return;
+		buf.getElmRef(pntMid.X(), pntMid.Y()) = fill;
+		DrawArc(buf, fill, center, radius, startAngle, midAngle);
+		DrawArc(buf, fill, center, radius, midAngle, endAngle);
+	}
+
+	static void DrawPie(CBuffer<T> &buf, const T fill, CPoint<int> center, int radius, float startAngle, float endAngle)
+	{
+		DrawLineAngle(buf, fill, center.X(), center.Y(), radius, startAngle);
+		DrawLineAngle(buf, fill, center.X(), center.Y(), radius, endAngle);
+		DrawArc(buf, fill, center, radius, startAngle, endAngle);
+	}
+
+	static void Fill(CBuffer<T> &buf, const T fill, CPoint<int> start)
+	{
+		if (buf.getElmRef(start.X(), start.Y()) == fill)
+			return;
+		buf.getElmRef(start.X(), start.Y()) = fill;
+
+		start.ShiftX(1);
+		if (!(buf.getElmRef(start.X(), start.Y()) == fill))
+			Fill(buf, fill, start);
+
+		start.ShiftX(-2);
+		if (!(buf.getElmRef(start.X(), start.Y()) == fill))
+			Fill(buf, fill, start);
+
+		start.ShiftX(1);
+		start.ShiftY(1);
+		if (!(buf.getElmRef(start.X(), start.Y()) == fill))
+			Fill(buf, fill, start);
+
+		start.ShiftY(-2);
+		if (!(buf.getElmRef(start.X(), start.Y()) == fill))
+			Fill(buf, fill, start);
 	}
 };
 

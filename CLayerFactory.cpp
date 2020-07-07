@@ -5,6 +5,7 @@
 #include "CMouseKeyboardSampleLayer.h"
 #include "C2dPlotAxisHandler.h"
 #include "CLegendHandler.h"
+#include "CPieChartLayer.h"
 
 #include <string.h>
 ILayer *CWidgetFactory::getLayer(const char *widgetType, const void *args)
@@ -44,6 +45,12 @@ ILayer *CWidgetFactory::getLayer(const char *widgetType, const void *args)
         if (strcmp(widgetType, "LegendHandler") == 0)
         {
             createdInstance = new CLegendHandler();
+            break;
+        }
+
+        if (strcmp(widgetType, "PieChartLayer") == 0)
+        {
+            createdInstance = new CPieChartLayer();
             break;
         }
         //matches nothing

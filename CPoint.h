@@ -20,6 +20,10 @@ public:
 		return CPoint<T>(X() / denominator, Y() / denominator);
 	}
 
+	bool operator==(const CPoint<T>& rhs){
+		return m_x==rhs.m_x && m_y==rhs.m_y;
+	}
+
 	void ShiftX(int shiftBy){
 		m_x += shiftBy;
 	}

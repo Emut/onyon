@@ -15,60 +15,69 @@ int main()
 
 	std::cout << "Hi" << std::endl;
 
-	CCanvas myCanvas(640, 480);
+	//create a canvas and enable display window
+	CCanvas myCanvas(640, 680);
 	myCanvas.DisplayOnScreen(true, "myWindow");
+
+	//A clock wiget with a picture of an onion as background
 	int clockWidget = myCanvas.CreateWidget(CRect<int>(10, 10, 210, 210));
 	myCanvas.InsertLayer(clockWidget, "BackgroundManager", "onion.ppm");
-	myCanvas.InsertLayer(clockWidget, "AnalogClock");
+	int clockLayer = myCanvas.InsertLayer(clockWidget, "AnalogClock");
+	myCanvas.setWidgetTitle(clockWidget, "NICE CLOCK");
 
-	int clockWidget2 = myCanvas.CreateWidget(CRect<int>(10, 220, 410, 610));
-	myCanvas.InsertLayer(clockWidget2, "BackgroundManager");
-	myCanvas.InsertLayer(clockWidget2, "2dAxisHandler");
-	int clockLayer = myCanvas.InsertLayer(clockWidget2, "LineGraph");
-	myCanvas.InsertLayer(clockWidget2, "LegendHandler");
+	//A line graph with a 2d Axis and a legend on top
+	int lineGraphWidget = myCanvas.CreateWidget(CRect<int>(10, 220, 410, 610));
+	myCanvas.InsertLayer(lineGraphWidget, "BackgroundManager");
+	myCanvas.InsertLayer(lineGraphWidget, "2dAxisHandler");
+	int lineGraphLayer = myCanvas.InsertLayer(lineGraphWidget, "LineGraph");
+	myCanvas.InsertLayer(lineGraphWidget, "LegendHandler");
+	myCanvas.setWidgetTitle(lineGraphWidget, "LINE GRAPH");
+	myCanvas.setxAxisLabel(lineGraphWidget, "X AXIS LABEL");
+	myCanvas.setyAxisLabel(lineGraphWidget, "Y AXIS LABEL");
 
+	//A widget to demonstrate mouse and keyboard inputs
 	int mkWidget = myCanvas.CreateWidget(CRect<int>(220, 10, 410, 210));
 	myCanvas.InsertLayer(mkWidget, "BackgroundManager", "onion.ppm");
 	myCanvas.InsertLayer(mkWidget, "MouseKeyboardSample");
 
-	myCanvas.setWidgetTitle(clockWidget, "NICE CLOCK");
-	myCanvas.setWidgetTitle(clockWidget2, "LINE GRAPH");
-	myCanvas.setxAxisLabel(clockWidget2, "X AXIS LABEL");
-	myCanvas.setyAxisLabel(clockWidget2, "Y AXIS LABEL");
+	//A pie chart widget
+	int pieWidget = myCanvas.CreateWidget(CRect<int>(420, 10, 640, 310));
+	myCanvas.InsertLayer(pieWidget, "BackgroundManager");
+	int pieLayer = myCanvas.InsertLayer(pieWidget, "PieChartLayer");
+	myCanvas.InsertLayer(pieWidget, "LegendHandler");
+	myCanvas.setWidgetTitle(pieWidget, "PIE CHART");
+	int pieData = 80;
+	myCanvas.InsertData(pieWidget, &pieData, &pieData + 1);
+	pieData = 20;
+	myCanvas.InsertData(pieWidget, &pieData, &pieData + 1);
 
-	myCanvas.UpdateAllWidgets();
+	//A bar graph widget
+	int barWidget = myCanvas.CreateWidget(CRect<int>(420, 320, 640, 610));
+	myCanvas.InsertLayer(barWidget, "BackgroundManager");
+	// int pieLayer = myCanvas.InsertLayer(lineGraphWidget, "LineGraph");
+	myCanvas.InsertLayer(barWidget, "LegendHandler");
+	myCanvas.setWidgetTitle(barWidget, "BAR GRAPH");
 
+	//Use specialCmd command to set clock's dial and number colors to black
+	CRGB arg = CRGB(0, 0, 0);
 	int cmd = 0;
-	CRGB arg = CRGB(255, 255, 255);
-	myCanvas.ExecuteSpecialLayerCmd(clockWidget2, clockLayer, &cmd, &arg);
+	myCanvas.ExecuteSpecialLayerCmd(clockWidget, clockLayer, &cmd, &arg);
 	cmd = 1;
-	myCanvas.ExecuteSpecialLayerCmd(clockWidget2, clockLayer, &cmd, &arg);
+	myCanvas.ExecuteSpecialLayerCmd(clockWidget, clockLayer, &cmd, &arg);
 	cmd = 2;
-	myCanvas.ExecuteSpecialLayerCmd(clockWidget2, clockLayer, &cmd, &arg);
+	myCanvas.ExecuteSpecialLayerCmd(clockWidget, clockLayer, &cmd, &arg);
 
+	//set the time for clock. Order is hour, minute and second.
+	//save the dataId of second to manipulate later
 	float data = 10;
 	myCanvas.InsertData(clockWidget, &data, &data + 1);
-	data = 16;
-	//myCanvas.InsertData(clockWidget2, &data, &data + 1);
 	data = 30;
 	myCanvas.InsertData(clockWidget, &data, &data + 1);
-	//myCanvas.InsertData(clockWidget2, &data, &data + 1);
 	data = 45;
 	int timeDataSec1 = myCanvas.InsertData(clockWidget, &data, &data + 1);
-	//int timeDataSec2 = myCanvas.InsertData(clockWidget2, &data, &data + 1);
+
+	//Insert 2 data to line graph, a sine wave and a cosine wave
 	std::vector<int> vectx, vecty;
-	for (int i = 0; i < 600; i += 20)
-	{
-		vectx.push_back(i);
-		float radX = float(i) * 3.14f / 180;
-		float sinVal = cos(radX);
-		int y = ROUND(-sinVal * 50 + 100);
-		vecty.push_back(y);
-	}
-	int sinLine = myCanvas.InsertData(clockWidget2, vecty.begin(), vecty.end());
-	myCanvas.setDataName(clockWidget2, sinLine, "SINE WAVE");
-	vecty.clear();
-	vectx.clear();
 	for (int i = 0; i < 600; i += 10)
 	{
 		vectx.push_back(i);
@@ -77,31 +86,36 @@ int main()
 		int y = ROUND(-sinVal * 50 + 100);
 		vecty.push_back(y);
 	}
-	int cosLine = myCanvas.InsertData(clockWidget2, vecty.begin(), vecty.end());
-	myCanvas.setDataName(clockWidget2, cosLine, "COS WAWE");
-	//myCanvas.setDataColor(clockWidget2, timeDataSec2, CRGB(255, 255, 255));
-	//myCanvas.setWidgetBackgroundColor(clockWidget2, CRGB(0, 0, 0));
-	//int timeDataID2 = myCanvas.InsertData(clockWidget2, timeData, timeData + 3);
+	int sinLine = myCanvas.InsertData(lineGraphWidget, vecty.begin(), vecty.end());
+	myCanvas.setDataName(lineGraphWidget, sinLine, "SINE WAVE");
+	vecty.clear();
+	vectx.clear();
+	for (int i = 0; i < 600; i += 20)
+	{
+		vectx.push_back(i);
+		float radX = float(i) * 3.14f / 180;
+		float sinVal = cos(radX);
+		int y = ROUND(-sinVal * 50 + 100);
+		vecty.push_back(y);
+	}
+	int cosLine = myCanvas.InsertData(lineGraphWidget, vecty.begin(), vecty.end());
+	myCanvas.setDataName(lineGraphWidget, cosLine, "COS WAWE");
+
+	//updating widgets triggers a redraw for all.
+	//if display is enabled, it is updated as well.
+	myCanvas.UpdateAllWidgets();
+
 	while (true)
 	{
 		data += 1;
 		myCanvas.ReplaceData(clockWidget, timeDataSec1, &data, &data + 1);
-		//	myCanvas.ReplaceData(clockWidget2, timeDataSec2, &data, &data + 1);
 		myCanvas.UpdateWidget(clockWidget);
-		myCanvas.UpdateWidget(clockWidget2);
 		sleep(1);
-		//printf("a\n");
-		//std::cin >> c;
-		//sleep(1);
 	}
 	myCanvas.SaveAsPpm("asd.pgm");
 
 	std::cin >> c;
 	return 0;
-
-	CPlotter myPlot;
-	myPlot.setTitle("0123456789 ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-	myPlot.ToggleDisplayWindow(true);
 
 	int heartDataCount = 2 * 3.1415 / 0.01;
 	float *heartX = new float[heartDataCount];

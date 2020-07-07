@@ -71,6 +71,9 @@ public:
         newSeries->color.setRed(colorMask&1?255:0);
         newSeries->color.setBlue(colorMask&2?255:0);
         newSeries->color.setGreen(colorMask&4?255:0);
+        char seriesName[50];
+        sprintf(seriesName, "SERIES%d", newDataID);
+        newSeries->setName(seriesName);
         return newDataID;
     }
 

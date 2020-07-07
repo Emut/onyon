@@ -66,4 +66,15 @@ public:
 	void ShiftRight(int shiftBy){
 		m_BR.ShiftX(shiftBy);
 	}
+
+	void ShiftBy(CPoint<T> shiftBy){
+		m_TL.ShiftX(shiftBy.X());
+		m_BR.ShiftX(shiftBy.X());
+		m_TL.ShiftY(shiftBy.Y());
+		m_BR.ShiftY(shiftBy.Y());
+	}
+
+	CPoint<T> getCenter(){
+		return CPoint<T>((m_TL.X()+m_BR.X())/2, (m_TL.Y()+m_BR.Y())/2);
+	}
 };

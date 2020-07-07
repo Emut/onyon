@@ -23,6 +23,7 @@ private:
     };
     Marker m_marker;
     CPoint<int> m_markerSize;
+    void DrawLegendMarker(CBuffer<CRGB>& buf, CRGB color);
 };
 
 #endif
