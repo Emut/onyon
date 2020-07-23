@@ -6,6 +6,7 @@
 #include "C2dPlotAxisHandler.h"
 #include "CLegendHandler.h"
 #include "CPieChartLayer.h"
+#include "CBarGraphLayer.h"
 
 #include <string.h>
 ILayer *CWidgetFactory::getLayer(const char *widgetType, const void *args)
@@ -53,6 +54,13 @@ ILayer *CWidgetFactory::getLayer(const char *widgetType, const void *args)
             createdInstance = new CPieChartLayer();
             break;
         }
+
+        if (strcmp(widgetType, "BarGraph") == 0)
+        {
+            createdInstance = new CBarGraphLayer();
+            break;
+        }
+
         //matches nothing
         return NULL;
     } while (false);

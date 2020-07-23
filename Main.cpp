@@ -7,6 +7,7 @@
 
 #include <math.h>
 #include <vector>
+#include <list>
 #include <unistd.h>
 
 int main()
@@ -50,11 +51,15 @@ int main()
 	myCanvas.InsertData(pieWidget, &pieData, &pieData + 1);
 	pieData = 20;
 	myCanvas.InsertData(pieWidget, &pieData, &pieData + 1);
+	pieData = 20;
+	myCanvas.InsertData(pieWidget, &pieData, &pieData + 1);
+	pieData = 20;
+	myCanvas.InsertData(pieWidget, &pieData, &pieData + 1);
 
 	//A bar graph widget
 	int barWidget = myCanvas.CreateWidget(CRect<int>(420, 320, 640, 610));
 	myCanvas.InsertLayer(barWidget, "BackgroundManager");
-	// int pieLayer = myCanvas.InsertLayer(lineGraphWidget, "LineGraph");
+	int barLayer = myCanvas.InsertLayer(barWidget, "BarGraph");
 	myCanvas.InsertLayer(barWidget, "LegendHandler");
 	myCanvas.setWidgetTitle(barWidget, "BAR GRAPH");
 
@@ -77,7 +82,7 @@ int main()
 	int timeDataSec1 = myCanvas.InsertData(clockWidget, &data, &data + 1);
 
 	//Insert 2 data to line graph, a sine wave and a cosine wave
-	std::vector<int> vectx, vecty;
+	std::list<int> vectx, vecty;
 	for (int i = 0; i < 600; i += 10)
 	{
 		vectx.push_back(i);
@@ -110,7 +115,11 @@ int main()
 		data += 1;
 		myCanvas.ReplaceData(clockWidget, timeDataSec1, &data, &data + 1);
 		myCanvas.UpdateWidget(clockWidget);
-		sleep(1);
+		vecty.push_front(vecty.back());
+		vecty.pop_back();
+		myCanvas.ReplaceData(lineGraphWidget, cosLine, vecty.begin(), vecty.end());
+		myCanvas.UpdateWidget(lineGraphWidget);
+		usleep(1000*1000);
 	}
 	myCanvas.SaveAsPpm("asd.pgm");
 
