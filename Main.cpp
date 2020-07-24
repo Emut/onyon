@@ -88,43 +88,23 @@ int main()
 		vectx.push_back(i);
 		float radX = float(i) * 3.14f / 180;
 		float sinVal = sin(radX);
-		int y = ROUND(-sinVal * 50 + 100);
+		int y = ROUND(sinVal * 50 + 100);
 		vecty.push_back(y);
 	}
 	int sinLine = myCanvas.InsertData(lineGraphWidget, vecty.begin(), vecty.end());
 	myCanvas.setDataName(lineGraphWidget, sinLine, "SINE WAVE");
 	vecty.clear();
 	vectx.clear();
-	for (int i = 0; i < 600; i += 20)
+	for (int i = 0; i < 600; i += 10)
 	{
 		vectx.push_back(i);
 		float radX = float(i) * 3.14f / 180;
 		float sinVal = cos(radX);
-		int y = ROUND(-sinVal * 50 + 100);
+		int y = ROUND(sinVal * 50 + 100);
 		vecty.push_back(y);
 	}
 	int cosLine = myCanvas.InsertData(lineGraphWidget, vecty.begin(), vecty.end());
 	myCanvas.setDataName(lineGraphWidget, cosLine, "COS WAWE");
-
-	//updating widgets triggers a redraw for all.
-	//if display is enabled, it is updated as well.
-	myCanvas.UpdateAllWidgets();
-
-	while (true)
-	{
-		data += 1;
-		myCanvas.ReplaceData(clockWidget, timeDataSec1, &data, &data + 1);
-		myCanvas.UpdateWidget(clockWidget);
-		vecty.push_front(vecty.back());
-		vecty.pop_back();
-		myCanvas.ReplaceData(lineGraphWidget, cosLine, vecty.begin(), vecty.end());
-		myCanvas.UpdateWidget(lineGraphWidget);
-		usleep(1000*1000);
-	}
-	myCanvas.SaveAsPpm("asd.pgm");
-
-	std::cin >> c;
-	return 0;
 
 	int heartDataCount = 2 * 3.1415 / 0.01;
 	float *heartX = new float[heartDataCount];
@@ -138,6 +118,26 @@ int main()
 		temp -= 5 * cos(2 * step);
 		temp -= 2 * cos(3 * step);
 		temp -= cos(4 * step);
-		heartY[i] = (-temp);
+		heartY[i] = (temp);
 	}
+	myCanvas.InsertData(lineGraphWidget, heartY, heartY + heartDataCount, heartX, heartX + heartDataCount);
+
+	//updating widgets triggers a redraw for all.
+	//if display is enabled, it is updated as well.
+	myCanvas.UpdateAllWidgets();
+
+	while (true)
+	{
+		data += 1;
+		myCanvas.ReplaceData(clockWidget, timeDataSec1, &data, &data + 1);
+		myCanvas.UpdateWidget(clockWidget);
+		vecty.push_back(vecty.front());
+		vecty.pop_front();
+		myCanvas.ReplaceData(lineGraphWidget, cosLine, vecty.begin(), vecty.end());
+		myCanvas.UpdateWidget(lineGraphWidget);
+		usleep(1000*100);
+	}
+	return 0;
+
+	
 }
