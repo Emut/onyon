@@ -2,6 +2,7 @@
 #include "CImageSaver.h"
 #include <string.h>
 #include "CLinearIter.h"
+#include "CDisplayHandler.h"
 
 CPlotter::CPlotter(int canvasWidth, int canvasHeigth) : m_canvas(canvasWidth, canvasHeigth), m_plotArea(10, 10, canvasHeigth - 10, canvasWidth - 10)
 {
@@ -11,13 +12,27 @@ CPlotter::CPlotter(int canvasWidth, int canvasHeigth) : m_canvas(canvasWidth, ca
 	m_xAxisLabel = NULL;
 	m_yAxisLabel = NULL;
 	m_NeedRedraw = false;
+	m_windowEnabled = false;
+	m_itsWindowHandler = NULL;
+}
+
+void CPlotter::PlotUpdated()
+{
+	if (m_windowEnabled)
+	{
+		Draw();
+		UpdateWindow();
+	}
+	else
+	{
+		m_NeedRedraw = true;
+	}
 }
 
 bool CPlotter::SaveAsPgm(const char *fileName)
 {
 	if (m_NeedRedraw)
 	{
-		m_NeedRedraw = false;
 		Draw();
 	}
 	return CImageSaver::SaveAsPgm(m_canvas, fileName);
@@ -27,7 +42,6 @@ bool CPlotter::SaveAsPpm(const char *fileName)
 {
 	if (m_NeedRedraw)
 	{
-		m_NeedRedraw = false;
 		Draw();
 	}
 	return CImageSaver::SaveAsPpm(m_canvas, fileName);
@@ -39,7 +53,7 @@ void CPlotter::setTitle(const char *title)
 		delete[] m_title;
 	m_title = new char[strlen(title)];
 	strcpy(m_title, title);
-	m_NeedRedraw = true;
+	PlotUpdated();
 }
 void CPlotter::setX_AxisLabel(const char *label)
 {
@@ -47,7 +61,7 @@ void CPlotter::setX_AxisLabel(const char *label)
 		delete[] m_xAxisLabel;
 	m_xAxisLabel = new char[strlen(label)];
 	strcpy(m_xAxisLabel, label);
-	m_NeedRedraw = true;
+	PlotUpdated();
 }
 void CPlotter::setY_AxisLabel(const char *label)
 {
@@ -55,7 +69,7 @@ void CPlotter::setY_AxisLabel(const char *label)
 		delete[] m_yAxisLabel;
 	m_yAxisLabel = new char[strlen(label)];
 	strcpy(m_yAxisLabel, label);
-	m_NeedRedraw = true;
+	PlotUpdated();
 }
 
 void CPlotter::DrawPlotBorder()
@@ -66,6 +80,7 @@ void CPlotter::DrawPlotBorder()
 void CPlotter::Draw()
 {
 	printf("Draw\n");
+	m_NeedRedraw = false;
 	m_canvas.Fill(CRGB(255, 255, 255)); //clear the canvas
 	if (m_title != NULL)
 	{
@@ -160,23 +175,45 @@ LineData *CPlotter::getLineData(int lineID)
 
 bool CPlotter::setLineDataPointMarker(int lineID, LineData::teDataPointMark marker)
 {
-	LineData* pLine = getLineData(lineID);
-	if(pLine == NULL)
+	LineData *pLine = getLineData(lineID);
+	if (pLine == NULL)
 		return false;
-	if(pLine->dataPointMarker == marker)
+	if (pLine->dataPointMarker == marker)
 		return true;
 	pLine->dataPointMarker = marker;
-	m_NeedRedraw = true;
+	PlotUpdated();
 	return true;
 }
 bool CPlotter::setLineColor(int lineID, CRGB color)
 {
-	LineData* pLine = getLineData(lineID);
-	if(pLine == NULL)
+	LineData *pLine = getLineData(lineID);
+	if (pLine == NULL)
 		return false;
-	if(color == pLine->color)
-		return true;	//no need to change color
+	if (color == pLine->color)
+		return true; //no need to change color
 	pLine->color = color;
-	m_NeedRedraw = true;
+	PlotUpdated();
 	return true;
+}
+
+bool CPlotter::ToggleDisplayWindow(bool enable)
+{
+	m_windowEnabled = enable;
+	if (m_windowEnabled)
+	{
+		if (m_itsWindowHandler == NULL)
+			m_itsWindowHandler = new CDisplayHandler(
+				m_canvas.getWidth(),
+				m_canvas.getHeigth(),
+				m_title);
+	}
+	UpdateWindow();
+	return true;
+}
+
+bool CPlotter::UpdateWindow()
+{
+	if (!m_windowEnabled)
+		return false;
+	return m_itsWindowHandler->Update(m_canvas);
 }

@@ -299,6 +299,22 @@ unsigned char letZ[] = {0, 3, 1, 3, 2, 3, 3, 3, 4, 3, 5, 3, 6, 3,
 const unsigned char charDot[] = {2, 8, 3, 8,
 	2, 9, 3, 9};
 
+const unsigned char charComma[] = {2, 8, 3, 8,
+	2, 9, 3, 9,
+	3, 10,
+	2, 11};
+
+const unsigned char charAt[] = {2, 2, 3, 2, 4, 2,
+	1, 3, 5, 3,
+	0, 4, 3, 4, 6, 4,
+	0, 5, 2, 5, 4, 5, 6, 5,
+	0, 6, 2, 6, 4, 6, 6, 6,
+	0, 7, 2, 7, 4, 7, 6, 7,
+	0, 8, 2, 8, 4, 8, 6, 8,
+	0, 9, 3, 9, 5, 9,
+	1, 10,
+	2, 11, 3, 11, 4, 11, 5, 11};
+
 const unsigned char charDash[] = { 1, 6, 2, 6, 3, 6, 4, 6, 5, 6};
 
 C7_12_Serif::C7_12_Serif(){
@@ -386,8 +402,12 @@ C7_12_Serif::C7_12_Serif(){
 	itsLetters[' '].corePxs = (tsPoint<unsigned char>*)0;
 	itsLetters['.'].corePxCnt = sizeof(charDot) / sizeof(unsigned char) / 2;
 	itsLetters['.'].corePxs = (tsPoint<unsigned char>*)charDot;
+	itsLetters[','].corePxCnt = sizeof(charComma) / sizeof(unsigned char) / 2;
+	itsLetters[','].corePxs = (tsPoint<unsigned char>*)charComma;
 	itsLetters['-'].corePxCnt = sizeof(charDash) / sizeof(unsigned char) / 2;
 	itsLetters['-'].corePxs = (tsPoint<unsigned char>*)charDash;
+	itsLetters['@'].corePxCnt = sizeof(charAt) / sizeof(unsigned char) / 2;
+	itsLetters['@'].corePxs = (tsPoint<unsigned char>*)charAt;
 }
 
 tsLetterGlyph* C7_12_Serif::getLetter(unsigned char letter){
