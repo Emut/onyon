@@ -85,21 +85,21 @@ void CPlotter::Draw()
 	if (m_title != NULL)
 	{
 		CPoint<int> size = DrawUtils<CRGB>::getStringSize(m_title);
-		CPoint<int> pos((m_canvas.getWidth() - size.X()) / 2, 5);
+		CPoint<int> pos((m_canvas.getWidth() - size.x) / 2, 5);
 		DrawUtils<CRGB>::DrawString(m_canvas, CRGB(0, 0, 0), pos, m_title);
 		m_plotArea.setTop(20);
 	}
 	if (m_xAxisLabel != NULL)
 	{
 		CPoint<int> size = DrawUtils<CRGB>::getStringSize(m_xAxisLabel);
-		CPoint<int> pos((m_canvas.getWidth() - size.X()) / 2, m_canvas.getHeigth() - 15);
+		CPoint<int> pos((m_canvas.getWidth() - size.x) / 2, m_canvas.getHeigth() - 15);
 		DrawUtils<CRGB>::DrawString(m_canvas, CRGB(0, 0, 0), pos, m_xAxisLabel);
 		m_plotArea.setBottom(m_canvas.getHeigth() - 20);
 	}
 	if (m_yAxisLabel != NULL)
 	{
 		CPoint<int> size = DrawUtils<CRGB>::getStringSize(m_yAxisLabel);
-		CPoint<int> pos(5, (m_canvas.getHeigth() + size.X()) / 2);
+		CPoint<int> pos(5, (m_canvas.getHeigth() + size.x) / 2);
 		DrawUtils<CRGB>::DrawStringRotatedLeft(m_canvas, CRGB(0, 0, 0), pos, m_yAxisLabel);
 		m_plotArea.setLeft(20);
 	}
@@ -135,8 +135,8 @@ void CPlotter::Draw()
 		{
 			float x = m_lineData[i].xdata[j];
 			float y = m_lineData[i].ydata[j];
-			x = (x - m_dataLimits.getLeft()) / m_dataLimits.getWidth() * (m_plotArea.getBottomRight() - m_plotArea.getTopLeft()).X() + m_plotArea.getTopLeft().X();
-			y = (y - m_dataLimits.getTop()) / m_dataLimits.getHeigth() * (m_plotArea.getBottomRight() - m_plotArea.getTopLeft()).Y() + m_plotArea.getTopLeft().Y();
+			x = (x - m_dataLimits.getLeft()) / m_dataLimits.getWidth() * (m_plotArea.getBottomRight() - m_plotArea.getTopLeft()).x + m_plotArea.getTopLeft().x;
+			y = (y - m_dataLimits.getTop()) / m_dataLimits.getHeigth() * (m_plotArea.getBottomRight() - m_plotArea.getTopLeft()).y + m_plotArea.getTopLeft().y;
 			if (j != 0)
 			{
 				DrawUtils<CRGB>::DrawLine(m_canvas, m_lineData[i].color, x_prev, y_prev, x, y);

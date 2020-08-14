@@ -181,7 +181,7 @@ void CCanvas::MouseMove(int x, int y)
             CPoint<int> layerPos = m_widgetAreas[i].getTopLeft();
             for (int j = 0; j < m_itsWidgets[i].size(); ++j)
             {
-                needRedraw |= m_itsWidgets[i][j]->MouseMove(x - layerPos.X(), y - layerPos.Y());
+                needRedraw |= m_itsWidgets[i][j]->MouseMove(x - layerPos.x, y - layerPos.y);
             }
             if (needRedraw)
             {

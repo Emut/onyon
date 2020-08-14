@@ -4,12 +4,12 @@
 void CMouseKeyboardSampleLayer::Draw(CBuffer<CRGB> buf)
 {
     char toWrite[30];
-    sprintf(toWrite, "MOUSE@%d,%d", m_MousePos.X(), m_MousePos.Y());
+    sprintf(toWrite, "MOUSE@%d,%d", m_MousePos.x, m_MousePos.y);
     DrawUtils<CRGB>::DrawString(buf, CRGB(255,0,0), CPoint<int>(0,0), toWrite);
     CPoint<int> textSize = DrawUtils<CRGB>::getStringSize(toWrite);
 
     sprintf(toWrite, "KEY@%d,%s", (int)m_key, m_isPressed?"PRESS":"RELEASE");
-    DrawUtils<CRGB>::DrawString(buf, CRGB(255,0,0), CPoint<int>(0,textSize.Y() + 1), toWrite);    
+    DrawUtils<CRGB>::DrawString(buf, CRGB(255,0,0), CPoint<int>(0,textSize.y + 1), toWrite);    
 }
 bool CMouseKeyboardSampleLayer::MouseMove(int x, int y)
 {

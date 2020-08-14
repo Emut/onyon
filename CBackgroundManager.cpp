@@ -38,11 +38,11 @@ void CBackgroundManager::Draw(CBuffer<CRGB> buf)
         CPoint<int> titleSize = DrawUtils<CRGB>::getStringSize(m_textFields->titleText.getText());
         if (!m_textFields->titleText.isPosSetExt)
         {
-            m_textFields->titleText.pos.X() = (buf.getWidth() - titleSize.X()) / 2;
-            m_textFields->titleText.pos.Y() = 1;
+            m_textFields->titleText.pos.x = (buf.getWidth() - titleSize.x) / 2;
+            m_textFields->titleText.pos.y = 1;
         }
         DrawUtils<CRGB>::DrawString(buf, m_textFields->titleText.color, m_textFields->titleText.pos, m_textFields->titleText.getText());
-        m_activeCanvasArea.ShiftTop(titleSize.Y() + 1);
+        m_activeCanvasArea.ShiftTop(titleSize.y + 1);
     }
     return;
 }

@@ -33,7 +33,7 @@ void CPieChartLayer::Draw(CBuffer<CRGB> buf)
         float midAngle = normalized/2 + angle;
         DrawUtils<CRGB>::DrawPie(buf, m_data->at(i)->color, center, radius,
                                  angle, angle + normalized);
-        CPoint<int> fillOffset(center.X() + cos(midAngle)*radius/2, center.Y() + sin(midAngle)*radius/2);
+        CPoint<int> fillOffset(center.x + cos(midAngle)*radius/2, center.y + sin(midAngle)*radius/2);
         DrawUtils<CRGB>::Fill(buf, m_data->at(i)->color, fillOffset);
         angle += normalized;
     }

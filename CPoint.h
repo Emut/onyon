@@ -4,37 +4,34 @@
 template<class T>
 class CPoint {
 public:
-	CPoint(T x, T y) : m_x(x), m_y(y) {}
+	CPoint(T x, T y) : x(x), y(y) {}
 
-	T& X() { return m_x; }
-	T& Y(){return m_y;}
 	CPoint<T> operator-(CPoint<T> second) {
-		return CPoint<T>(X() - second.X(), Y() - second.Y());
+		return CPoint<T>(x - second.x, y - second.y);
 	}
 
 	CPoint<T> operator+(CPoint<T> second) {
-		return CPoint<T>(X() + second.X(), Y() + second.Y());
+		return CPoint<T>(x + second.x, y + second.y);
 	}
 
 	CPoint<T> operator/(T denominator) {
-		return CPoint<T>(X() / denominator, Y() / denominator);
+		return CPoint<T>(x / denominator, y / denominator);
 	}
 
 	bool operator==(const CPoint<T>& rhs){
-		return m_x==rhs.m_x && m_y==rhs.m_y;
+		return x==rhs.x && y==rhs.y;
 	}
 
 	void ShiftX(int shiftBy){
-		m_x += shiftBy;
+		x += shiftBy;
 	}
 
 	void ShiftY(int shiftBy){
-		m_y += shiftBy;
+		y += shiftBy;
 	}
 
-private:
-	T m_x;
-	T m_y;
+	T x;
+	T y;
 };
 
 #endif

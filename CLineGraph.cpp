@@ -41,11 +41,11 @@ void CLineGraph::Draw(CBuffer<CRGB> buf)
             CPoint<float> currentPnt(0, seriesData->ydata[j]);
             if (seriesData->xdataCount != 0)
             {
-                currentPnt.X() = seriesData->xdata[j];
+                currentPnt.x = seriesData->xdata[j];
             }
             else
             {
-                currentPnt.X() = j + 1;
+                currentPnt.x = j + 1;
             }
             currentPnt = NormalizePoint(dataArea, buf.getAreaRect(), currentPnt);
             DrawUtils<CRGB>::DrawLine(buf, seriesData->color, currentPnt, prevPnt);
@@ -62,8 +62,8 @@ void CLineGraph::setData(std::vector<CSeriesData *> *data)
 CPoint<float> CLineGraph::NormalizePoint(CRect<float> areaFrom, CRect<int> areaTo, CPoint<float> point)
 {
     CPoint<float> retVal(0, 0);
-    retVal.X() = (point.X() - areaFrom.getLeft()) / (areaFrom.getWidth() - 1) * (areaTo.getWidth() - 1);
-    retVal.Y() = (areaTo.getHeigth() - 1) - (point.Y() - areaFrom.getTop()) / (areaFrom.getHeigth() - 1) * (areaTo.getHeigth() - 1);
+    retVal.x = (point.x - areaFrom.getLeft()) / (areaFrom.getWidth() - 1) * (areaTo.getWidth() - 1);
+    retVal.y = (areaTo.getHeigth() - 1) - (point.y - areaFrom.getTop()) / (areaFrom.getHeigth() - 1) * (areaTo.getHeigth() - 1);
 
     return retVal;
 }

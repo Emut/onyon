@@ -24,24 +24,24 @@ void CLegendHandler::Draw(CBuffer<CRGB> buf)
     {
         CSeriesData *data = m_data->at(i);
         CPoint<int> size = DrawUtils<CRGB>::getStringSize(data->name);
-        legendSize.ShiftY(size.Y() + 1);
-        legendSize.X() = legendSize.X() < size.X() ? size.X() : legendSize.X();
+        legendSize.ShiftY(size.y + 1);
+        legendSize.x = legendSize.x < size.x ? size.x : legendSize.x;
     }
     //widen by 4 to fit text
     legendSize.ShiftX(4);
 
     if (m_marker != NONE)
     {
-        legendSize.ShiftX(m_markerSize.X() + 4);
+        legendSize.ShiftX(m_markerSize.x + 4);
     }
 
     CRect<int> legendArea;
 
-    CPoint<int> legendTL(buf.getWidth() - legendSize.X() - 2, 1);
-    legendArea.setTop(legendTL.Y());
-    legendArea.setLeft(legendTL.X());
-    legendArea.setRight(legendTL.X() + legendSize.X());
-    legendArea.setBottom(legendTL.Y() + legendSize.Y());
+    CPoint<int> legendTL(buf.getWidth() - legendSize.x - 2, 1);
+    legendArea.setTop(legendTL.y);
+    legendArea.setLeft(legendTL.x);
+    legendArea.setRight(legendTL.x + legendSize.x);
+    legendArea.setBottom(legendTL.y + legendSize.y);
 
     CBuffer<CRGB> canvasLegend(buf, legendArea);
     canvasLegend.Fill(m_colorBackground);
@@ -50,15 +50,15 @@ void CLegendHandler::Draw(CBuffer<CRGB> buf)
     CPoint<int> writePos(1, 1);
     if (m_marker != NONE)
     {
-        writePos.ShiftX(m_markerSize.X() + 4);
+        writePos.ShiftX(m_markerSize.x + 4);
     }
     for (int i = 0; i < m_data->size(); ++i)
     {
         CSeriesData *data = m_data->at(i);
         CPoint<int> textSize = DrawUtils<CRGB>::getStringSize(data->name);
         CPoint<int> markerPos = writePos;
-        markerPos.ShiftX(-m_markerSize.X() - 2);
-        markerPos.ShiftY((textSize.Y() - m_markerSize.Y())/2);
+        markerPos.ShiftX(-m_markerSize.x - 2);
+        markerPos.ShiftY((textSize.y - m_markerSize.y)/2);
         CPoint<int> markerBR = markerPos;
         markerBR = markerBR + m_markerSize;
         CRect<int> boxMarker(markerPos, markerBR);
@@ -68,7 +68,7 @@ void CLegendHandler::Draw(CBuffer<CRGB> buf)
                                     data->color,
                                     writePos,
                                     data->name);
-        writePos.ShiftY(textSize.Y() + 1);
+        writePos.ShiftY(textSize.y + 1);
     }
 }
 

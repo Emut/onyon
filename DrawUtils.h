@@ -54,7 +54,7 @@ public:
 
 	static void DrawLine(CBuffer<T> &buf, const T fill, CPoint<float> begin, CPoint<float> end)
 	{
-		DrawLine(buf, fill, begin.X(), begin.Y(), end.X(), end.Y());
+		DrawLine(buf, fill, begin.x, begin.y, end.x, end.y);
 	}
 	static void DrawLineAngle(CBuffer<T> &buf, const T fill, int x, int y, int length, float radAngle)
 	{
@@ -83,7 +83,7 @@ public:
 
 	static void DrawCircle(CBuffer<T> &buf, const T fill, CPoint<int> center, int radius)
 	{
-		DrawCircle(buf, fill, center.X(), center.Y(), radius);
+		DrawCircle(buf, fill, center.x, center.y, radius);
 	}
 	static void DrawString(CBuffer<T> &buf, const T fill, CPoint<int> pos, const char *string)
 	{
@@ -93,9 +93,9 @@ public:
 			tsLetterGlyph *currentLetter = itsFont->getLetter(*string);
 			for (int i = 0; i < currentLetter->corePxCnt; ++i)
 			{
-				buf.getElmRef(pos.X() + currentLetter->corePxs[i].X, pos.Y() + currentLetter->corePxs[i].Y) = fill;
+				buf.getElmRef(pos.x + currentLetter->corePxs[i].X, pos.y + currentLetter->corePxs[i].Y) = fill;
 			}
-			pos.X() += currentLetter->width + 1;
+			pos.x += currentLetter->width + 1;
 			++string;
 		}
 	}
@@ -107,12 +107,12 @@ public:
 		while (*string != 0)
 		{
 			tsLetterGlyph *currentLetter = itsFont->getLetter(*string);
-			size.X() += currentLetter->width + 1; //include the 1px gap between chars
-			if (size.Y() < currentLetter->heigth)
-				size.Y() = currentLetter->heigth;
+			size.x += currentLetter->width + 1; //include the 1px gap between chars
+			if (size.y < currentLetter->heigth)
+				size.y = currentLetter->heigth;
 			++string;
 		}
-		--size.X(); //numOfGaps is one less than letters
+		--size.x; //numOfGaps is one less than letters
 		return size;
 	}
 	/*
@@ -136,19 +136,19 @@ public:
 			tsLetterGlyph *currentLetter = itsFont->getLetter(*string);
 			for (int i = 0; i < currentLetter->corePxCnt; ++i)
 			{
-				buf.getElmRef(pos.X() + currentLetter->corePxs[i].Y, pos.Y() - currentLetter->corePxs[i].X) = fill;
+				buf.getElmRef(pos.x + currentLetter->corePxs[i].Y, pos.y - currentLetter->corePxs[i].X) = fill;
 			}
-			pos.Y() -= currentLetter->width + 1;
+			pos.y -= currentLetter->width + 1;
 			++string;
 		}
 	}
 
 	static void DrawRectangle(CBuffer<T> &buf, const T fill, CPoint<int> TopLeft, CPoint<int> BottomRight)
 	{
-		DrawUtils<T>::DrawLine(buf, fill, TopLeft.X(), TopLeft.Y(), TopLeft.X(), BottomRight.Y());
-		DrawUtils<T>::DrawLine(buf, fill, TopLeft.X(), TopLeft.Y(), BottomRight.X(), TopLeft.Y());
-		DrawUtils<T>::DrawLine(buf, fill, TopLeft.X(), BottomRight.Y(), BottomRight.X(), BottomRight.Y());
-		DrawUtils<T>::DrawLine(buf, fill, BottomRight.X(), TopLeft.Y(), BottomRight.X(), BottomRight.Y());
+		DrawUtils<T>::DrawLine(buf, fill, TopLeft.x, TopLeft.y, TopLeft.x, BottomRight.y);
+		DrawUtils<T>::DrawLine(buf, fill, TopLeft.x, TopLeft.y, BottomRight.x, TopLeft.y);
+		DrawUtils<T>::DrawLine(buf, fill, TopLeft.x, BottomRight.y, BottomRight.x, BottomRight.y);
+		DrawUtils<T>::DrawLine(buf, fill, BottomRight.x, TopLeft.y, BottomRight.x, BottomRight.y);
 	}
 
 	static void DrawRectangle(CBuffer<T> &buf, const T fill, CRect<int> rect)
@@ -158,46 +158,46 @@ public:
 
 	static void DrawArc(CBuffer<T> &buf, const T fill, CPoint<int> center, int radius, float startAngle, float endAngle)
 	{
-		CPoint<int> pntStart(center.X() + ROUND(radius * cos(startAngle)), center.Y() + ROUND(radius * sin(startAngle)));
-		CPoint<int> pntEnd(center.X() + ROUND(radius * cos(endAngle)), center.Y() + ROUND(radius * sin(endAngle)));
+		CPoint<int> pntStart(center.x + ROUND(radius * cos(startAngle)), center.y + ROUND(radius * sin(startAngle)));
+		CPoint<int> pntEnd(center.x + ROUND(radius * cos(endAngle)), center.y + ROUND(radius * sin(endAngle)));
 		float midAngle = startAngle + endAngle;
 		midAngle /= 2;
-		CPoint<int> pntMid(center.X() + ROUND(radius * cos(midAngle)), center.Y() + ROUND(radius * sin(midAngle)));
+		CPoint<int> pntMid(center.x + ROUND(radius * cos(midAngle)), center.y + ROUND(radius * sin(midAngle)));
 		if (pntMid == pntStart || pntMid == pntEnd)
 			return;
-		buf.getElmRef(pntMid.X(), pntMid.Y()) = fill;
+		buf.getElmRef(pntMid.x, pntMid.y) = fill;
 		DrawArc(buf, fill, center, radius, startAngle, midAngle);
 		DrawArc(buf, fill, center, radius, midAngle, endAngle);
 	}
 
 	static void DrawPie(CBuffer<T> &buf, const T fill, CPoint<int> center, int radius, float startAngle, float endAngle)
 	{
-		DrawLineAngle(buf, fill, center.X(), center.Y(), radius, startAngle);
-		DrawLineAngle(buf, fill, center.X(), center.Y(), radius, endAngle);
+		DrawLineAngle(buf, fill, center.x, center.y, radius, startAngle);
+		DrawLineAngle(buf, fill, center.x, center.y, radius, endAngle);
 		DrawArc(buf, fill, center, radius, startAngle, endAngle);
 	}
 
 	static void Fill(CBuffer<T> &buf, const T fill, CPoint<int> start)
 	{
-		if (buf.getElmRef(start.X(), start.Y()) == fill)
+		if (buf.getElmRef(start.x, start.y) == fill)
 			return;
-		buf.getElmRef(start.X(), start.Y()) = fill;
+		buf.getElmRef(start.x, start.y) = fill;
 
 		start.ShiftX(1);
-		if (!(buf.getElmRef(start.X(), start.Y()) == fill))
+		if (!(buf.getElmRef(start.x, start.y) == fill))
 			Fill(buf, fill, start);
 
 		start.ShiftX(-2);
-		if (!(buf.getElmRef(start.X(), start.Y()) == fill))
+		if (!(buf.getElmRef(start.x, start.y) == fill))
 			Fill(buf, fill, start);
 
 		start.ShiftX(1);
 		start.ShiftY(1);
-		if (!(buf.getElmRef(start.X(), start.Y()) == fill))
+		if (!(buf.getElmRef(start.x, start.y) == fill))
 			Fill(buf, fill, start);
 
 		start.ShiftY(-2);
-		if (!(buf.getElmRef(start.X(), start.Y()) == fill))
+		if (!(buf.getElmRef(start.x, start.y) == fill))
 			Fill(buf, fill, start);
 	}
 };
