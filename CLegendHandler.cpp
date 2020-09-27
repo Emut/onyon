@@ -44,7 +44,10 @@ void CLegendHandler::Draw(CBuffer<CRGB> buf)
     legendArea.setBottom(legendTL.y + legendSize.y);
 
     CBuffer<CRGB> canvasLegend(buf, legendArea);
-    canvasLegend.Fill(m_colorBackground);
+    if(m_colorBackground.isGrayScale())
+        canvasLegend.FillWithByte(m_colorBackground.getBlue());
+    else
+        canvasLegend.Fill(m_colorBackground);
     DrawUtils<CRGB>::DrawRectangle(canvasLegend, CRGB(0, 0, 0), canvasLegend.getAreaRect());
 
     CPoint<int> writePos(1, 1);

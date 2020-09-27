@@ -23,7 +23,10 @@ void CBackgroundManager::Draw(CBuffer<CRGB> buf)
     if(backgroundImageBuf != NULL)
         buf.CopyFrom(*backgroundImageBuf);
     else
-        buf.Fill(m_bgColor);
+        if(m_bgColor.isGrayScale())
+            buf.FillWithByte(m_bgColor.getRed());
+        else
+            buf.Fill(m_bgColor);
     m_activeCanvasArea = buf.getAreaRect();
     DrawUtils<CRGB>::DrawRectangle(buf,
                                    CRGB(0, 0, 0), buf.getAreaRect());

@@ -20,3 +20,7 @@ bool CRGB::operator==(const CRGB &other)
     result &= m_green == other.m_green;
     return result;
 }
+
+bool CRGB::isGrayScale(){
+    return (m_blue == m_green) && (m_blue == m_red);
+}

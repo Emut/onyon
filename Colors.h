@@ -15,6 +15,7 @@ public:
 	void setBlue(unsigned char value);
 
 	bool operator==(const CRGB& other);
+	bool isGrayScale();
 private:
 	unsigned char m_blue;
 	unsigned char m_green;

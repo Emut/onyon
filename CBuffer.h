@@ -2,6 +2,7 @@
 #define CBUFFER_H
 #include <iostream>
 #include "CRect.h"
+#include <string.h>
 
 template <class T>
 class CBuffer
@@ -73,6 +74,21 @@ public:
 				++it;
 			}
 			it += strideDiff;
+		}
+	}
+
+	//fill entire buffer with a single byte
+	void FillWithByte(const char filler){
+		if(m_stride == m_width){
+			memset(m_itsBuffer, filler, m_width*m_heigth*sizeof(T));
+			return;
+		}
+		char* lineStart = (char*)m_itsBuffer;
+		const int length = m_width * sizeof(T);
+		const int skipLength = m_stride * sizeof(T);
+		for(int i = 0; i < m_heigth; ++i){
+			memset(lineStart, filler, length);
+			lineStart += skipLength;
 		}
 	}
 

@@ -72,7 +72,6 @@ void CClockWidget::DrawDial(CBuffer<CRGB> actCanvas)
 }
 void CClockWidget::DrawHands(CBuffer<CRGB> actCanvas)
 {
-
     //CBuffer<CRGB> actCanvas = m_bgMgr->getActiveCanvas();
     CPoint<int> clockCenter(actCanvas.getWidth() / 2, actCanvas.getHeigth() / 2);
     int outerRad = std::min(actCanvas.getWidth(), actCanvas.getHeigth()) / 2 - 5;
@@ -87,29 +86,33 @@ void CClockWidget::DrawHands(CBuffer<CRGB> actCanvas)
     {
         float secAngle = 3.14f * second.time / 30 - 1.57f;
         DrawUtils<CRGB>::DrawLineAngle(actCanvas, second.color,
-                                  clockCenter.x, clockCenter.y, secLenCoeff * outerRad, secAngle);
+                                       clockCenter.x, clockCenter.y, secLenCoeff * outerRad, secAngle);
     }
 
     if (minute.valid)
     {
         float minAngle = 3.14f * shiftedMinute / 30 - 1.57f;
         DrawUtils<CRGB>::DrawLineAngle(actCanvas, minute.color,
-                                  clockCenter.x, clockCenter.y, minLenCoeff * outerRad, minAngle);
+                                       clockCenter.x, clockCenter.y, minLenCoeff * outerRad, minAngle);
         DrawUtils<CRGB>::DrawLineAngle(actCanvas, minute.color,
-                                  clockCenter.x - 1, clockCenter.y, minLenCoeff * outerRad, minAngle);
+                                       clockCenter.x - 1, clockCenter.y, minLenCoeff * outerRad, minAngle);
         DrawUtils<CRGB>::DrawLineAngle(actCanvas, minute.color,
-                                  clockCenter.x + 1, clockCenter.y, minLenCoeff * outerRad, minAngle);
+                                       clockCenter.x + 1, clockCenter.y, minLenCoeff * outerRad, minAngle);
     }
 
     if (hour.valid)
     {
         float hourAngle = 3.14f * shiftedHour / 6 - 1.57f;
         DrawUtils<CRGB>::DrawLineAngle(actCanvas, hour.color,
-                                  clockCenter.x, clockCenter.y, hourLenCoeff * outerRad, hourAngle);
+                                       clockCenter.x, clockCenter.y, hourLenCoeff * outerRad, hourAngle);
         DrawUtils<CRGB>::DrawLineAngle(actCanvas, hour.color,
-                                  clockCenter.x - 1, clockCenter.y, hourLenCoeff * outerRad, hourAngle);
+                                       clockCenter.x - 1, clockCenter.y, hourLenCoeff * outerRad, hourAngle);
         DrawUtils<CRGB>::DrawLineAngle(actCanvas, hour.color,
-                                  clockCenter.x + 1, clockCenter.y, hourLenCoeff * outerRad, hourAngle);
+                                       clockCenter.x + 1, clockCenter.y, hourLenCoeff * outerRad, hourAngle);
+        DrawUtils<CRGB>::DrawLineAngle(actCanvas, hour.color,
+                                       clockCenter.x, clockCenter.y + 1, hourLenCoeff * outerRad, hourAngle);
+        DrawUtils<CRGB>::DrawLineAngle(actCanvas, hour.color,
+                                       clockCenter.x, clockCenter.y - 1, hourLenCoeff * outerRad, hourAngle);
     }
 }
 
@@ -121,11 +124,11 @@ void CClockWidget::SpecialCommand(void *command, void *args)
     case 0:
         m_numberColor = *((CRGB *)args);
         break;
-    
+
     case 1:
         m_dialInnerColor = *((CRGB *)args);
         break;
-    
+
     case 2:
         m_dialOuterColor = *((CRGB *)args);
         break;
