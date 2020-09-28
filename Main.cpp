@@ -14,10 +14,10 @@ int main()
 	std::cout << "Hi" << std::endl;
 
 	//create a canvas and enable display window
-	CCanvas myCanvas(640, 680);
+	CCanvas myCanvas(640, 880);
 	myCanvas.DisplayOnScreen(true, "myWindow");
 
-	//A clock wiget with a picture of an onion as background
+	//A clock widget with a picture of an onion as background
 	int clockWidget = myCanvas.CreateWidget(CRect<int>(10, 10, 210, 210));
 	myCanvas.InsertLayer(clockWidget, "BackgroundManager", "onion.ppm");
 	int clockLayer = myCanvas.InsertLayer(clockWidget, "AnalogClock");
@@ -62,6 +62,36 @@ int main()
 	myCanvas.setWidgetTitle(barWidget, "BAR GRAPH");
 	myCanvas.setxAxisLabel(barWidget, "X AXIS");
 	myCanvas.setyAxisLabel(barWidget, "Y AXIS");
+	float barData = 20;
+	myCanvas.InsertData(barWidget, &barData, &barData + 1);
+	barData = 30;
+	myCanvas.InsertData(barWidget, &barData, &barData + 1);
+	barData = 40;
+	myCanvas.InsertData(barWidget, &barData, &barData + 1);
+	barData = 25;
+	myCanvas.InsertData(barWidget, &barData, &barData + 1);
+	barData = 10;
+	myCanvas.InsertData(barWidget, &barData, &barData + 1);
+
+	//A horizontal bar graph widget
+	int horBarWidget = myCanvas.CreateWidget(CRect<int>(650, 10, 870, 610));
+	myCanvas.InsertLayer(horBarWidget, "BackgroundManager");
+	myCanvas.InsertLayer(horBarWidget, "2dAxisHandler");
+	int horBarLayer = myCanvas.InsertLayer(horBarWidget, "HorizontalBarGraph");
+	myCanvas.InsertLayer(horBarWidget, "LegendHandler");
+	myCanvas.setWidgetTitle(horBarWidget, "BAR GRAPH");
+	myCanvas.setxAxisLabel(horBarWidget, "X AXIS");
+	myCanvas.setyAxisLabel(horBarWidget, "Y AXIS");
+	float horBarData = 20;
+	myCanvas.InsertData(horBarWidget, &horBarData, &horBarData + 1);
+	horBarData = 10;
+	myCanvas.InsertData(horBarWidget, &horBarData, &horBarData + 1);
+	horBarData = 50;
+	myCanvas.InsertData(horBarWidget, &horBarData, &horBarData + 1);
+	horBarData = -10;
+	myCanvas.InsertData(horBarWidget, &horBarData, &horBarData + 1);
+	horBarData = 10;
+	myCanvas.InsertData(horBarWidget, &horBarData, &horBarData + 1);
 
 	//Use specialCmd command to set clock's dial and number colors to black
 	CRGB arg = CRGB(0, 0, 0);

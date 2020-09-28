@@ -61,6 +61,12 @@ ILayer *CWidgetFactory::getLayer(const char *widgetType, const void *args)
             break;
         }
 
+        if (strcmp(widgetType, "HorizontalBarGraph") == 0)
+        {
+            createdInstance = new CBarGraphLayer(false);
+            break;
+        }
+
         //matches nothing
         return NULL;
     } while (false);
